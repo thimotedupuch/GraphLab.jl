@@ -11,6 +11,9 @@ From computational biology and social network analysis to high-performance compu
   <source srcset="assets/images/GraphPartitioning.jl_bk.png" media="(prefers-color-scheme: dark)">
   <img src="assets/images/GraphPartitioning.jl.png">
 </picture>
+
+__FILLER TEXT FROM OTHER PROJECT "Aryan" WILL CHANGE SOON__
+
 This figure is a visual representation of one step of the time-iteration algorithm. We solve the first-order conditions (FOC) of the model for the state variable
 $x_t$ 
 in the updated policy function 
