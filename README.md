@@ -8,8 +8,8 @@ Graph partitioning is a fundamental problem with wide-ranging applications in sc
 From computational biology and social network analysis to high-performance computing and distributed systems, efficient graph partitioning techniques are key to optimizing performance, reducing computational overhead, and enabling deeper insights into complex data.
 
 <picture>
-  <source srcset="assets/images/GraphPartitioning.jl.png" media="(prefers-color-scheme: dark)">
-  <img src="assets/images/GraphPartitioning.jl.png"  height="240">
+  <source srcset="assets/images/GraphPartitioning.jl_bk.png" media="(prefers-color-scheme: dark)">
+  <img src="assets/images/GraphPartitioning.jl.png">
 </picture>
 This figure is a visual representation of one step of the time-iteration algorithm. We solve the first-order conditions (FOC) of the model for the state variable
 $x_t$ 
