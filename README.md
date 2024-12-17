@@ -1,11 +1,5 @@
 # GraphPartitioning.jl
 
-<picture>
-  <source srcset="assets/images/GraphPartitioning.jl.png" media="(prefers-color-scheme: dark)">
-  <img src="assets/images/GraphPartitioning.jl.png"  height="240">
-</picture>
-
-
 This is the code repository for ``GraphPartitioning.jl``, a toolbox for graph partitioning algorithms in Julia. It provides a framework to compare, benchmark, and analyze various graph partitioning techniques. The framework supports both non-recursive and recursive methods with geometric information, like coordinate and inertial bisection, as well as methods without geometric information, such as spectral bisection. It makes it easy to evaluate and compare the outputs of different methods, helping users understand their trade-offs and applications.
 
 We chose Julia for its modern, user-friendly syntax, high performance, and commitment to open-source principles. This makes it an ideal language for both education and research in graph partitioning.
@@ -13,7 +7,10 @@ We chose Julia for its modern, user-friendly syntax, high performance, and commi
 Graph partitioning is a fundamental problem with wide-ranging applications in scientific domains where the relationships between interconnected variables play a crucial role.
 From computational biology and social network analysis to high-performance computing and distributed systems, efficient graph partitioning techniques are key to optimizing performance, reducing computational overhead, and enabling deeper insights into complex data.
 
-
+<picture>
+  <source srcset="assets/images/GraphPartitioning.jl.png" media="(prefers-color-scheme: dark)">
+  <img src="assets/images/GraphPartitioning.jl.png"  height="240">
+</picture>
 This figure is a visual representation of one step of the time-iteration algorithm. We solve the first-order conditions (FOC) of the model for the state variable
 $x_t$ 
 in the updated policy function 
