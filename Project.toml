@@ -1,5 +1,6 @@
 name = "GraphPartitioning"
 uuid = "08c46284-3b16-45fc-acf0-44dbf172b2a6"
+authors = ["Lechekhab Malik <malik.lechekhab@usi.ch>"]
 version = "1.0.0"
 
 [deps]
