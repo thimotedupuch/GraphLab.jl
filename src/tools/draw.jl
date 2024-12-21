@@ -42,13 +42,13 @@ function _vis_graph(A, coords, p)
     L_u = sort(unique(p))  # Unique labels
 
     # Create a figure with specified resolution
-    f = Figure(size = res, figure_padding = 1)
+    f = Figure(size = res,background=:transparent)
 
     # Set a global theme for all axes
     set_theme!(Axis = (xgridvisible = false, ygridvisible = false))
 
     # Create axis
-    ax = Axis(f[2, 1])
+    ax = Axis(f[1, 1],aspect = DataAspect())
 
     # Plot edges
     i, j = findnz(tril(A))  # Find non-zero elements in the lower triangle of A
@@ -65,8 +65,9 @@ function _vis_graph(A, coords, p)
 
     # Plot scatter points
     scatter!(ax, coords[:, 1], coords[:, 2], color = p, colormap = cmap, markersize = marker_size)
-    ax.aspect = DataAspect()  # Keep aspect ratio consistent
+    #ax.aspect = DataAspect()  # Keep aspect ratio consistent
     tightlimits!(ax)          # Fit the view to the data
+    
     return f
 end
 
