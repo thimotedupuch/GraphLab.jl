@@ -129,10 +129,6 @@ This example demonstrates recursive bisection using different methods, including
    julia ex2.jl
    ```
 
-
-
----
-
 ## Notes
 
 - Ensure that all dependencies for the package and the examples are installed. If you encounter any issues, make sure the package environment is activated, and run:
