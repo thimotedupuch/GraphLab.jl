@@ -22,6 +22,8 @@ To install the package from GitHub and add it to your working environment, follo
    p = GraphPartitioning.part_spectral(A)
    GraphPartitioning.draw_graph(A, coords, ,p file_name="test.png")
    ```
+   
+  For further details on the package and its functions, see [Paper](www.google.com).
 
 ### Prerequisites and Dependencies
 
@@ -146,17 +148,6 @@ This example demonstrates recursive bisection using different methods, including
    ```bash
    julia ex2.jl
    ```
-
-## Notes
-
-- Ensure that all dependencies for the package and the examples are installed. If you encounter any issues, make sure the package environment is activated, and run:
-
-  ```julia
-  using Pkg
-  Pkg.instantiate()
-  ```
-
-- For detailed documentation and usage examples, refer to the official documentation (if provided) or explore the source code in the `src` directory.
 
 ## Citation
 
