@@ -14,13 +14,13 @@ using Colors
 # As required by the authors of the original paper, please cite:
 # }
 function _vis_graph(A, coords, p)
-    
+
     cmap = distinguishable_colors(
       maximum(p) - minimum(p) + 1, # Adjust colormap to the range of labels
       [RGB(1,1,1), RGB(0,0,0)],
       dropseed = true
     )
-    res = (800, 800)        # Resolution of the output figure
+    
     intra_edge_width = 1.0  # Line width for intra-cluster edges
     inter_edge_width = 0.1  # Line width for inter-cluster edges
     edge_opacity = 1.0      # Transparency for edges
@@ -34,6 +34,18 @@ function _vis_graph(A, coords, p)
         jj = vec([reshape(Y[vcat(i[idx], j[idx]), 2], (Int32.(sum(idx)), 2)) NaN * zeros(sum(idx))]')
         lines!(ax, ii, jj, color = color, linewidth = lwd)
     end
+        
+    # Compute min and max values for x and y
+    x_min, x_max = extrema(coords[:, 1])  # x-values
+    y_min, y_max = extrema(coords[:, 2])  # y-values
+
+    # Compute aspect ratio
+    x_range = x_max - x_min
+    y_range = y_max - y_min
+    aspect_ratio = x_range / y_range
+    
+    height = 800
+    width = round(Int, aspect_ratio * height)
 
     n = size(coords, 1)  # Number of points
 
@@ -42,7 +54,7 @@ function _vis_graph(A, coords, p)
     L_u = sort(unique(p))  # Unique labels
 
     # Create a figure with specified resolution
-    f = Figure(size = res,backgroundcolor=:transparent)
+    f = Figure(size = (width, height), backgroundcolor=:transparent)
 
     # Set a global theme for all axes
     set_theme!(Axis = (xgridvisible = false, ygridvisible = false))
@@ -66,24 +78,13 @@ function _vis_graph(A, coords, p)
     # Plot scatter points
     scatter!(ax, coords[:, 1], coords[:, 2], color = p, colormap = cmap, markersize = marker_size)
     #ax.aspect = DataAspect()  # Keep aspect ratio consistent
-    tightlimits!(ax)          # Fit the view to the data
     
+    tightlimits!(ax)          # Fit the view to the data
+    resize_to_layout!(f)
+    #ax.aspect = DataAspect()
     return f
 end
 
-
-function _alpha_colorbuffer(figure)
-    scene = figure.scene
-    bg = scene.backgroundcolor[]
-    scene.backgroundcolor[] = RGBAf(0, 0, 0, 1)
-    b1 = copy(colorbuffer(scene))
-    scene.backgroundcolor[] = RGBAf(1, 1, 1, 1)
-    b2 = colorbuffer(scene)
-    scene.backgroundcolor[] = bg
-    return map(b1, b2) do b1, b2
-        calculate_rgba(b1, b2, bg)
-    end
-end
 
 function draw_graph(A::AbstractSparseMatrix, coords::Matrix, p::Vector{Int};file_name::Union{String, Nothing}=nothing)
     CairoMakie.activate!()
