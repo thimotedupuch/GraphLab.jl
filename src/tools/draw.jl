@@ -42,13 +42,13 @@ function _vis_graph(A, coords, p)
     L_u = sort(unique(p))  # Unique labels
 
     # Create a figure with specified resolution
-    f = Figure(size = res,background=:transparent)
+    f = Figure(size = res,backgroundcolor=:transparent)
 
     # Set a global theme for all axes
     set_theme!(Axis = (xgridvisible = false, ygridvisible = false))
 
     # Create axis
-    ax = Axis(f[1, 1],aspect = DataAspect())
+    ax = Axis(f[1, 1],backgroundcolor=:transparent)
 
     # Plot edges
     i, j = findnz(tril(A))  # Find non-zero elements in the lower triangle of A
@@ -71,6 +71,19 @@ function _vis_graph(A, coords, p)
     return f
 end
 
+
+function _alpha_colorbuffer(figure)
+    scene = figure.scene
+    bg = scene.backgroundcolor[]
+    scene.backgroundcolor[] = RGBAf(0, 0, 0, 1)
+    b1 = copy(colorbuffer(scene))
+    scene.backgroundcolor[] = RGBAf(1, 1, 1, 1)
+    b2 = colorbuffer(scene)
+    scene.backgroundcolor[] = bg
+    return map(b1, b2) do b1, b2
+        calculate_rgba(b1, b2, bg)
+    end
+end
 
 function draw_graph(A::AbstractSparseMatrix, coords::Matrix, p::Vector{Int};file_name::Union{String, Nothing}=nothing)
     CairoMakie.activate!()
