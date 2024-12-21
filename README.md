@@ -60,24 +60,34 @@ This example compares different graph partitioning methods, including:
 - **Bisection using METIS**
 
 The script evaluates these methods on a series of different graphs, providing insights into their performance and effectiveness.
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; text-align: center;">
-  <div style="padding: 0; margin: 0;">
-    <img src="examples/ex1_airfoil1_coordinate.png" alt="Coordinate Bisection" style="width: 100%; margin: 0; padding: 0;">
-    <p style="margin: 0; padding: 0;"><em>Coordinate Bisection</em></p>
-  </div>
-  <div style="padding: 0; margin: 0;">
-    <img src="examples/ex1_airfoil1_inertial.png" alt="Inertial Bisection" style="width: 100%; margin: 0; padding: 0;">
-    <p style="margin: 0; padding: 0;"><em>Inertial Bisection</em></p>
-  </div>
-  <div style="padding: 0; margin: 0;">
-    <img src="examples/ex1_airfoil1_spectral.png" alt="Spectral Bisection" style="width: 100%; margin: 0; padding: 0;">
-    <p style="margin: 0; padding: 0;"><em>Spectral Bisection</em></p>
-  </div>
-  <div style="padding: 0; margin: 0;">
-    <img src="examples/ex1_airfoil1_metis.png" alt="METIS Bisection" style="width: 100%; margin: 0; padding: 0;">
-    <p style="margin: 0; padding: 0;"><em>METIS</em></p>
-  </div>
-</div>
+
+<!-- 2x2 Grid for Airfoil1 Examples -->
+<table style="width:100%; border-collapse: collapse;">
+  <tr>
+    <!-- Coordinate Bisection -->
+    <td style="width:50%; text-align: center; padding: 0;">
+      <img src="examples/ex1_airfoil1_coordinate.png" alt="Coordinate Bisection" style="width:100%; margin:0; padding:0;">
+      <p style="margin: 0; padding: 0;"><em>Coordinate Bisection</em></p>
+    </td>
+    <!-- Inertial Bisection -->
+    <td style="width:50%; text-align: center; padding: 0;">
+      <img src="examples/ex1_airfoil1_inertial.png" alt="Inertial Bisection" style="width:100%; margin:0; padding:0;">
+      <p style="margin: 0; padding: 0;"><em>Inertial Bisection</em></p>
+    </td>
+  </tr>
+  <tr>
+    <!-- Spectral Bisection -->
+    <td style="width:50%; text-align: center; padding: 0;">
+      <img src="examples/ex1_airfoil1_spectral.png" alt="Spectral Bisection" style="width:100%; margin:0; padding:0;">
+      <p style="margin: 0; padding: 0;"><em>Spectral Bisection</em></p>
+    </td>
+    <!-- METIS Bisection -->
+    <td style="width:50%; text-align: center; padding: 0;">
+      <img src="examples/ex1_airfoil1_metis.png" alt="METIS Bisection" style="width:100%; margin:0; padding:0;">
+      <p style="margin: 0; padding: 0;"><em>METIS</em></p>
+    </td>
+  </tr>
+</table>
 
 #### How to Run Example 1
 
@@ -106,24 +116,32 @@ This example demonstrates recursive bisection using different methods, including
 - **Spectral Bisection**
 - **Recursive Bisection using METIS K-way**
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center;">
-  <div>
-    <img src="examples/ex2_Swiss_graph_coordinate.png" alt="Recursive Coordinate Bisection" style="width: 100%;">
-    <p style="font-size: 12px;"><em>Recursive Coordinate Bisection</em></p>
-  </div>
-  <div>
-    <img src="examples/ex2_Swiss_graph_inertial.png" alt="Recursive Inertial Bisection" style="width: 100%;">
-    <p style="font-size: 12px;"><em>Recursive Inertial Bisection</em></p>
-  </div>
-  <div>
-    <img src="examples/ex2_Swiss_graph_spectral.png" alt="Recursive Spectral Bisection" style="width: 100%;">
-    <p style="font-size: 12px;"><em>Recursive Spectral Bisection</em></p>
-  </div>
-  <div>
-    <img src="examples/ex2_Swiss_graph_metis_rec.png" alt="Recursive METIS Bisection" style="width: 100%;">
-    <p style="font-size: 12px;"><em>Recursive METIS Bisection</em></p>
-  </div>
-</div>
+<table style="width:100%; border-collapse: collapse;">
+  <tr>
+    <!-- Recursive Coordinate Bisection -->
+    <td style="width:50%; text-align: center; padding: 10px;">
+      <img src="examples/ex2_Swiss_graph_coordinate.png" alt="Recursive Coordinate Bisection" style="width:100%;">
+      <p style="font-size: 12px;"><em>Recursive Coordinate Bisection</em></p>
+    </td>
+    <!-- Recursive Inertial Bisection -->
+    <td style="width:50%; text-align: center; padding: 10px;">
+      <img src="examples/ex2_Swiss_graph_inertial.png" alt="Recursive Inertial Bisection" style="width:100%;">
+      <p style="font-size: 12px;"><em>Recursive Inertial Bisection</em></p>
+    </td>
+  </tr>
+  <tr>
+    <!-- Recursive Spectral Bisection -->
+    <td style="width:50%; text-align: center; padding: 10px;">
+      <img src="examples/ex2_Swiss_graph_spectral.png" alt="Recursive Spectral Bisection" style="width:100%;">
+      <p style="font-size: 12px;"><em>Recursive Spectral Bisection</em></p>
+    </td>
+    <!-- Recursive METIS Bisection -->
+    <td style="width:50%; text-align: center; padding: 10px;">
+      <img src="examples/ex2_Swiss_graph_metis_rec.png" alt="Recursive METIS Bisection" style="width:100%;">
+      <p style="font-size: 12px;"><em>Recursive METIS Bisection</em></p>
+    </td>
+  </tr>
+</table>
 
 #### How to Run Example 2
 
