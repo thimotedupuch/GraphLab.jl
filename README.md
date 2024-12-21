@@ -2,14 +2,28 @@
 
 This is the code repository for ``GraphPartitioning.jl``, a toolbox for graph partitioning algorithms in Julia. It provides a framework to compare, benchmark, and analyze various graph partitioning techniques. The framework supports both non-recursive and recursive methods with geometric information, like coordinate and inertial bisection, as well as methods without geometric information, such as spectral bisection. It makes it easy to evaluate and compare the outputs of different methods, helping users understand their trade-offs and applications.
 
-We chose Julia for its modern, user-friendly syntax, high performance, and commitment to open-source principles. This makes it an ideal language for both education and research in graph partitioning.
-
-Graph partitioning is a fundamental problem with wide-ranging applications in scientific domains where the relationships between interconnected variables play a crucial role.
-From computational biology and social network analysis to high-performance computing and distributed systems, efficient graph partitioning techniques are key to optimizing performance, reducing computational overhead, and enabling deeper insights into complex data.
-
 Feel free to contribute or report issues on the GitHub repository for **GraphPartitioning.jl**. Happy partitioning!
 
-## Prerequisites and Dependencies
+## Getting Started
+
+### Installation
+To install the package from GitHub and add it to your working environment, follow these steps:
+
+1. Add the ``GraphPartitioning.jl`` to you project using the Julia command:
+   ```julia
+   using Pkg
+   Pkg.add(url="https://github.com/lechekhabm/GraphPartitioning.jl")
+   ```
+
+2. Basic Example:
+   ```julia
+   using GraphPartitioning
+   A, coords = GraphPartitioning.build_adjacency("network")
+   p = GraphPartitioning.part_spectral(A)
+   GraphPartitioning.draw_graph(A, coords, ,p file_name="test.png")
+   ```
+
+### Prerequisites and Dependencies
 
 The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, and **Statistics**.
 
@@ -21,9 +35,14 @@ Refer to the source code and `Project.toml` files within the `examples/` directo
 
 The package includes example scripts in the `GraphPartitioning/examples/` directory. These scripts demonstrate how to use the package to benchmark and compare different graph partitioning methods.
 
+To run these examples you need to clone the repo using the command:
+   ```bash
+   git clone https://github.com/lechekhabm/GraphPartitioning.jl
+   ```
+
 ### Example 1: Comparing Partitioning Methods
 
-**Script:** `GraphPartitioning/examples/ex1.jl`
+**Script:** `GraphPartitioning.jl/examples/ex1.jl`
 
 This example compares different graph partitioning methods, including:
 
@@ -67,19 +86,18 @@ The script evaluates these methods on a series of different graphs, providing in
 1. Navigate to the `examples` directory:
 
    ```bash
-   cd GraphPartitioning/examples
+   cd GraphPartitioning.jl/examples
    ```
 
-2. Run the example script in the Julia REPL or directly from the terminal:
+2. Run the example script in the Julia or directly from the terminal:
 
    ```bash
    julia ex1.jl
    ```
 
-
 ### Example 2: Recursive Bisection
 
-**Script:** `GraphPartitioning/examples/ex2.jl`
+**Script:** `GraphPartitioning.jl/examples/ex2.jl`
 
 This example demonstrates recursive bisection using different methods, including:
 
@@ -120,10 +138,10 @@ This example demonstrates recursive bisection using different methods, including
 1. Navigate to the `examples` directory:
 
    ```bash
-   cd GraphPartitioning/examples
+   cd GraphPartitioning.jl/examples
    ```
 
-2. Run the example script in the Julia REPL or directly from the terminal:
+2. Run the example script in the Julia or directly from the terminal:
 
    ```bash
    julia ex2.jl
@@ -156,7 +174,6 @@ Please cite [XXXX](https://epubs.siam.org/doi/10.1137/21M1392231) in your public
 }
 ```
 See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf) for an archived version of the article. 
-
 
 ### Authors
 * [Name Name](https://google.com) (Department, University of X)
