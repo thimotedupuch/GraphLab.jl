@@ -7,42 +7,19 @@ We chose Julia for its modern, user-friendly syntax, high performance, and commi
 Graph partitioning is a fundamental problem with wide-ranging applications in scientific domains where the relationships between interconnected variables play a crucial role.
 From computational biology and social network analysis to high-performance computing and distributed systems, efficient graph partitioning techniques are key to optimizing performance, reducing computational overhead, and enabling deeper insights into complex data.
 
-<picture>
-  <source srcset="assets/images/GraphPartitioning.jl_bk.png" media="(prefers-color-scheme: dark)">
-  <img src="assets/images/GraphPartitioning.jl.png">
-</picture>
+Feel free to contribute or report issues on the GitHub repository for **GraphPartitioning.jl**. Happy partitioning!
 
 ---
 
-## Running Unit Tests
+## Prerequisites and Dependencies
 
-To evaluate the functionality of different partitioning methods, execute the `test` function directly via the command line interface. This function invokes all tests defined in the test suite and provides a detailed report of the results.
+The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, and **Statistics**.
 
-### Steps:
+For additional usability, you may need the following packages: **DelimitedFiles**, **MAT**, **Plots**, and **PrettyTables**.
 
-1. Navigate to the root directory of the package:
-
-   ```bash
-   cd GraphPartitioning
-   ```
-
-2. Launch the Julia REPL and activate the package environment:
-
-   ```bash
-   julia --project=.
-   ```
-
-3. Run the tests using the following commands:
-
-   ```julia
-   using GraphPartitioning
-   GraphPartitioning.test()
-   ```
-
-Executing these steps will ensure that all test cases in `/test/runtests.jl` are executed, allowing for a systematic verification of key partitioning algorithems and interfaces.
+Refer to the source code and `Project.toml` files within the `examples/` directory for further details about dependencies and configurations. Additional explanations are provided later in this document.
 
 ---
-
 
 ## Running Examples
 
@@ -138,7 +115,7 @@ This example demonstrates recursive bisection using different methods, including
     <!-- Recursive METIS Bisection -->
     <td style="width:50%; text-align: center; padding: 10px;">
       <img src="examples/ex2_Swiss_graph_metis_rec.png" alt="Recursive METIS Bisection" style="width:100%;">
-      <p style="font-size: 12px;"><em>Recursive METIS Bisection</em></p>
+      <p style="font-size: 12px;"><em>Recursive METIS Bisection (K-way is also available)</em></p>
     </td>
   </tr>
 </table>
@@ -157,6 +134,8 @@ This example demonstrates recursive bisection using different methods, including
    julia ex2.jl
    ```
 
+
+
 ---
 
 ## Notes
@@ -172,9 +151,7 @@ This example demonstrates recursive bisection using different methods, including
 
 ---
 
-Feel free to contribute or report issues on the GitHub repository for **GraphPartitioning.jl**. Happy partitioning!
-
-## Publication
+## Citation
 
 Please cite [XXXX](https://epubs.siam.org/doi/10.1137/21M1392231) in your publications if it helps your research:
 ```
@@ -193,7 +170,7 @@ See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf)
 
 
 ### Authors
-* [Name Name](https://google.com) (Department of Economics, University of Lausanne)
+* [Name Name](https://google.com) (Department, University of X)
 
 * [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing,Università della Svizzera italiana)
 
