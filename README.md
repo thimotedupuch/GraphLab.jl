@@ -9,8 +9,6 @@ From computational biology and social network analysis to high-performance compu
 
 Feel free to contribute or report issues on the GitHub repository for **GraphPartitioning.jl**. Happy partitioning!
 
----
-
 ## Prerequisites and Dependencies
 
 The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, and **Statistics**.
@@ -18,8 +16,6 @@ The package will automatically install the following dependencies: **Arpack**, *
 For additional usability, you may need the following packages: **DelimitedFiles**, **MAT**, **Plots**, and **PrettyTables**.
 
 Refer to the source code and `Project.toml` files within the `examples/` directory for further details about dependencies and configurations. Additional explanations are provided later in this document.
-
----
 
 ## Running Examples
 
@@ -80,7 +76,6 @@ The script evaluates these methods on a series of different graphs, providing in
    julia ex1.jl
    ```
 
----
 
 ### Example 2: Recursive Bisection
 
@@ -149,8 +144,6 @@ This example demonstrates recursive bisection using different methods, including
 
 - For detailed documentation and usage examples, refer to the official documentation (if provided) or explore the source code in the `src` directory.
 
----
-
 ## Citation
 
 Please cite [XXXX](https://epubs.siam.org/doi/10.1137/21M1392231) in your publications if it helps your research:
@@ -174,6 +167,5 @@ See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf)
 
 * [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing,Università della Svizzera italiana)
 
-
 ### Acknowledgments  
-We would like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.   
+We would like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.
