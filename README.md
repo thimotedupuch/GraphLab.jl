@@ -161,7 +161,7 @@ See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf)
 ### Authors
 * [Name Name](https://google.com) (Department, University of X)
 
-* [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing,Università della Svizzera italiana)
+* [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing, Università della Svizzera italiana)
 
 ### Acknowledgments  
 We would like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.
