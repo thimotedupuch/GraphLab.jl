@@ -189,14 +189,14 @@ Please cite [XXXX](https://epubs.siam.org/doi/10.1137/21M1392231) in your public
  doi = {10.1137/21M1392231}
 }
 ```
-See [here](https://arxiv.org/pdf/2202.06555.pdf) for an archived version of the article. 
+See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf) for an archived version of the article. 
 
 
 ### Authors
-* [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Department of Economics, University of Lausanne)
-* [Simon Scheidegger](https://sites.google.com/site/simonscheidegger/) (Department of Economics, University of Lausanne)
+* [Name Name](https://google.com) (Department of Economics, University of Lausanne)
+
+* [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing,Università della Svizzera italiana)
 
 
-### Other Relate Resreach 
-[Using Adaptive Sparse Grids to Solve High-Dimensional Dynamic Models; Brumm & Scheidegger (2017)](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA12216)).
-[Sparse Grids for Dynamic Economic Models; Brumm et al. (2022)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3979412)(2021)
+### Acknowledgments  
+We would like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.   
