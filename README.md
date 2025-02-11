@@ -25,7 +25,7 @@ To install the package from GitHub and add it to your working environment, follo
    using GraphPartitioning
    A, coords = GraphPartitioning.build_adjacency("network")
    p = GraphPartitioning.part_spectral(A)
-   GraphPartitioning.draw_graph(A, coords, ,p file_name="test.png")
+   GraphPartitioning.draw_graph(A, coords, p, file_name="test.png")
    ```
    
   For further details on the package and its functions, see [Paper](www.google.com).
