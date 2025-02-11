@@ -14,8 +14,12 @@ To install the package from GitHub and add it to your working environment, follo
    using Pkg
    Pkg.add(url="https://github.com/lechekhabm/GraphPartitioning.jl")
    ```
+   **Note:**If you have an SSH key set up with GitHub, you can install the package using SSH:
+   ```Pkg.add(url="https://<YOUR_GITHUB_TOKEN>@github.com/lechekhabm/GraphPartitioning.jl.git")
+   ```
+   Replace `<YOUR_GITHUB_TOKEN>` with a valid token that has repository read access.
 
-2. Basic Example:
+3. Basic Example:
    ```julia
    using GraphPartitioning
    A, coords = GraphPartitioning.build_adjacency("network")
