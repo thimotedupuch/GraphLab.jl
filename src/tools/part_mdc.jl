@@ -8,7 +8,7 @@ Partition the graph `A` into `np` parts using the MDC algorithm.
 # Arguments
 - `A`: Adjacency matrix (SparseMatrixCSC).
 - `np`: Number of partitions.
-- `cut_type`: Partitioning objective (`"ncut"` or `"rcut"`, default: `"ncut"`).
+- `cut_type`: Partitioning objective (default: `"ncut"`).
 - `local_search`: Local refinement level (default: `0`).
 - `beta_testing`: Enable beta parameter tuning (default: `true`).
 - `spectral_method`: Use spectral partitioning (default: `true`).
@@ -20,7 +20,7 @@ Partition the graph `A` into `np` parts using the MDC algorithm.
 - Partitioning result or error if the process fails.
 """
 function run_mdc(A::SparseMatrixCSC,
-                np::Int,
+                np::Int;
                 cut_type::String="ncut",
                 local_search::Int=0,
                 beta_testing::Bool=true,
@@ -41,7 +41,6 @@ function run_mdc(A::SparseMatrixCSC,
         error("❌ MDC execution failed with error:\n" * result.code)
     end
 
-    # TODO: Has to be coherent for all external software
     partition_file = "graph.graph"*".part."*string(np)
     partitions = Int[]
 
@@ -57,8 +56,13 @@ function run_mdc(A::SparseMatrixCSC,
     end
 
     if dbg
-        return result.stdout, partitions, partition_file
+        println("🖥️ Execution Result:\n", result.stdout)
+        println("📂 Partition File: ", partition_file)
+        println("🔢 Partitions: ", partitions)
+        return partitions
     else
+        # Remove the partition file after reading
+        rm(partition_file, force=true)
         return partitions
     end
 end

@@ -1,5 +1,5 @@
 """
-    write_graph_input(A::SparseMatrixCSC; prefix::String="graph", temp::Bool=true) -> String
+    write_graph_input(A::SparseMatrixCSC; prefix::String="graph", temp::Bool=false) -> String
 
 Generate a graph file in a format compatible with partitioning tools like KaHIP, Graclus, and MDC.
 

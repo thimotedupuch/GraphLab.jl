@@ -20,7 +20,7 @@ A tuple containing:
 julia> run_kahip(A, "./graphs/file.graph", 4, "fast")
 
 """
-function run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String="fast", dbg::Bool=false)
+function run_kahip(A::SparseMatrixCSC, np::Int; preconfiguration::String="fast", dbg::Bool=false)
 
     mat_path = _write_partition_input(A)
 
@@ -34,7 +34,6 @@ function run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String="fast",
         error("KaHIP execution failed with error:\n" * result.code)
     end
 
-    # TODO: Has to be coherent for all external software
     partition_file = "tmppartition" * string(np)
     partitions = Int[]
 
@@ -50,8 +49,13 @@ function run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String="fast",
     end
 
     if dbg
-        return result.stdout, partitions, partition_file
+        println("🖥️ Execution Result:\n", result.stdout)
+        println("📂 Partition File: ", partition_file)
+        println("🔢 Partitions: ", partitions)
+        return partitions
     else
+        # Remove the partition file after reading
+        rm(partition_file, force=true)
         return partitions
     end
 end
