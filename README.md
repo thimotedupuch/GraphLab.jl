@@ -172,7 +172,7 @@ Please cite [XXXX](https://epubs.siam.org/doi/10.1137/21M1392231) in your public
 See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf) for an archived version of the article. 
 
 ### Authors
-* [Malik Lechekhab](https://google.com](https://www.linkedin.com/in/mlechekhab/) (Institute of Computing, Università della Svizzera italiana)
+* [Malik Lechekhab](https://www.linkedin.com/in/mlechekhab/) (Institute of Computing, Università della Svizzera italiana)
 
 * [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing, Università della Svizzera italiana)
 
