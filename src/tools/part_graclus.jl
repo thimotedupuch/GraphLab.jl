@@ -17,13 +17,14 @@ function run_graclus(A::SparseMatrixCSC, np::Int, cut_type::String="ncut", local
 
     mat_path = _write_partition_input(A)
 
-    # TODO: Needs to be set by user
-	cmd = `../Graphs/graclus1.2_original/graclus $mat_path $np -O $cut_type -L $local_search`;
+    graclus_exec = _get_executable("GRACLUS_PATH")
+
+	cmd = `$graclus_exec $mat_path $np -O $cut_type -L $local_search`;
 
     result = _run_cmd(cmd)
 	
     if result.code != 0
-        error("Graclus execution failed with error:\n" * result.code)
+        error("❌ Graclus execution failed with error:\n" * result.code)
     end
 
     # TODO: Has to be coherent for all external software
@@ -36,9 +37,9 @@ function run_graclus(A::SparseMatrixCSC, np::Int, cut_type::String="ncut", local
                 push!(partitions, parse(Int, line))
             end
         end
-        println("Partitions extracted from ", partition_file)
+        println("✅ Partitions extracted from ", partition_file)
     catch e
-        error("Failed to read partition file '$partition_file': ", e)
+        error("❌ Failed to read partition file '$partition_file': ", e)
     end
 
     if dbg

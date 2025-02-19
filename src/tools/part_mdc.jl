@@ -31,17 +31,14 @@ function run_mdc(A::SparseMatrixCSC,
 
     mat_path = _write_partition_input(A)
 
-    # TODO: Needs to be set by user
-    # Set the library path to locate the STAG library
-    ENV["LD_LIBRARY_PATH"] = "../Graphs/graclus1.2/stag/stag-1.3.0/build_dir/stag_lib/"
+    mdc_exec = _get_executable("MDC_PATH")
 
-    # TODO: Needs to be set by user
-	cmd = `../Graphs/graclus1.2/graclus $mat_path $np -b $beta_testing -s $spectral_method -O $cut_type -y $beta_min -z $beta_max -L $local_search`;
+	cmd = `$mdc_exec $mat_path $np -b $beta_testing -s $spectral_method -O $cut_type -y $beta_min -z $beta_max -L $local_search`;
 
     result = _run_cmd(cmd)
 	
     if result.code != 0
-        error("MDC execution failed with error:\n" * result.code)
+        error("❌ MDC execution failed with error:\n" * result.code)
     end
 
     # TODO: Has to be coherent for all external software
@@ -54,9 +51,9 @@ function run_mdc(A::SparseMatrixCSC,
                 push!(partitions, parse(Int, line))
             end
         end
-        println("Partitions extracted from ", partition_file)
+        println("✅ Partitions extracted from ", partition_file)
     catch e
-        error("Failed to read partition file '$partition_file': ", e)
+        error("❌ Failed to read partition file '$partition_file': ", e)
     end
 
     if dbg

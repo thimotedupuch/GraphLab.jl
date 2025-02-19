@@ -20,12 +20,13 @@ A tuple containing:
 julia> run_kahip(A, "./graphs/file.graph", 4, "fast")
 
 """
-function run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String, dbg::Bool=false)
+function run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String="fast", dbg::Bool=false)
 
     mat_path = _write_partition_input(A)
 
-    # TODO: Needs to be set by user
-	cmd = `../Graphs/KaHIP/deploy/kaffpa $mat_path --k $np --preconfiguration=$preconfiguration`;
+    kahip_exec = _get_executable("KAHIP_PATH")
+
+	cmd = `$kahip_exec $mat_path --k $np --preconfiguration=$preconfiguration`;
 
     result = _run_cmd(cmd)
 	
@@ -43,9 +44,9 @@ function run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String, dbg::B
                 push!(partitions, parse(Int, line))
             end
         end
-        println("Partitions extracted from ", partition_file)
+        println("✅ Partitions extracted from ", partition_file)
     catch e
-        error("Failed to read partition file '$partition_file': ", e)
+        error("❌ Failed to read partition file '$partition_file': ", e)
     end
 
     if dbg
