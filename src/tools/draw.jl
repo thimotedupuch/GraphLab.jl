@@ -1,8 +1,16 @@
 # M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
 """
-    draw_graph(A, coords, p)
+    _vis_graph(A::SparseMatrixCSC, coords::Matrix, p::Vector{Int})
 
-Plot the partitions `p` of graph `A`.
+Visualize the partitioning `p` of graph `A` using node coordinates `coords`.
+
+# Arguments
+- `A`: Adjacency matrix of the graph.
+- `coords`: Node coordinates for plotting.
+- `p`: Partition labels for each node.
+
+# Output
+- Displays the partitioned graph visualization.
 """
 
 using CairoMakie
@@ -13,7 +21,9 @@ using Colors
 # Here, we augment it for our specific purposes.
 # As required by the authors of the original paper, please cite:
 # }
-function _vis_graph(A, coords, p)
+function _vis_graph(A::SparseMatrixCSC,
+                    coords::Matrix,
+                    p::Vector{Int})
 
     cmap = distinguishable_colors(
       maximum(p) - minimum(p) + 1, # Adjust colormap to the range of labels
@@ -86,7 +96,22 @@ function _vis_graph(A, coords, p)
 end
 
 
-function draw_graph(A::AbstractSparseMatrix, coords::Matrix, p::Vector{Int};file_name::Union{String, Nothing}=nothing)
+"""
+    draw_graph(A::SparseMatrixCSC, coords::Matrix, p::Vector{Int}; file_name::Union{String, Nothing}=nothing)
+
+Draw and optionally save a visualization of the partitioned graph `A`.
+
+# Arguments
+- `A`: Adjacency matrix of the graph.
+- `coords`: Node coordinates for plotting.
+- `p`: Partition labels for each node.
+- `file_name` (optional): If provided, saves the figure to the specified file.
+
+# Output
+- Returns the generated figure.
+- Saves the figure if `file_name` is specified.
+"""
+function draw_graph(A::SparseMatrixCSC, coords::Matrix, p::Vector{Int};file_name::Union{String, Nothing}=nothing)
     CairoMakie.activate!()
     fig = _vis_graph(A, coords, p)
 
@@ -99,13 +124,23 @@ function draw_graph(A::AbstractSparseMatrix, coords::Matrix, p::Vector{Int};file
     return fig
 end
 
-"""
-    draw_graph(A, coords)
 
-Plot the graph based on its adjacency matrix `A`.
 """
-function draw_graph(A::AbstractSparseMatrix, coords::Matrix;file_name::Union{String, Nothing}=nothing)
+    draw_graph(A::SparseMatrixCSC, coords::Matrix; file_name::Union{String, Nothing}=nothing)
+
+Draw and optionally save a visualization of the graph `A` without partitioning.
+
+# Arguments
+- `A`: Adjacency matrix of the graph.
+- `coords`: Node coordinates for plotting.
+- `file_name` (optional): If provided, saves the figure to the specified file.
+
+# Output
+- Returns the generated figure.
+- Saves the figure if `file_name` is specified.
+"""
+function draw_graph(A::SparseMatrixCSC, coords::Matrix; file_name::Union{String, Nothing}=nothing)
     n = size(A)[1]
     p = ones(Int, n)
-    return draw_graph(A, coords, p,file_name=file_name)
+    return draw_graph(A, coords, p, file_name=file_name)
 end

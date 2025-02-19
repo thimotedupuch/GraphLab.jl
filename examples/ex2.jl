@@ -4,7 +4,30 @@ Pkg.activate(@__DIR__)
 using SparseArrays,DelimitedFiles, MAT, Plots, PrettyTables
 using GraphPartitioning
 
-function benchmark(A, coords,k, prefix)
+"""
+    benchmark(A::SparseMatrixCSC{Float64, Int64}, coords::Matrix{Int64}, k::Int64, prefix::String)
+
+Run various graph partitioning methods on `A` and save visualizations.
+
+# Arguments
+- `A::SparseMatrixCSC{Float64, Int64}`: Adjacency matrix of the graph.
+- `coords::Matrix{Int64}`: Node coordinates for visualization.
+- `k::Int64`: Number of partitions.
+- `prefix::String`: Filename prefix for saved images.
+
+# Methods Used
+- Coordinate-based (`part_coordinate`)
+- Inertial (`part_inertial`)
+- Spectral (`part_spectral`)
+- METIS recursive bisection (`part_metis` with `k` partitions).
+
+# Output
+- Saves partitioned graph visualizations as PNG files.
+"""
+function benchmark( A::SparseMatrixCSC, 
+                    coords::Matrix, 
+                    k::Int64, 
+                    prefix::String)
 
 
     # Partition methods
@@ -71,7 +94,7 @@ for (i, file_name) in enumerate(files)
 
     # Run the benchmark function
     println("Processing file: $file_path with prefix: $prefix")
-    results = benchmark(A, coords,k, prefix)
+    results = benchmark(A, coords, k, prefix)
 
     final_results[i,1] = file_name
     final_results[i,2] = results[1]

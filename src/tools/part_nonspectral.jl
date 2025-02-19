@@ -1,18 +1,25 @@
-# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
+# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch  
 
-# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
+
 """
-    partition(coords, v)
+    _partition(coords::Matrix, v::Vector)
 
-Compute a `coords`-based partition using a line of direction `v`.
+Compute a partition based on `coords` using a direction vector `v`.
 
-# Examples
+# Arguments
+- `coords::Matrix`: Node coordinates in a 2D space.
+- `v::Vector`: Direction vector defining the partitioning line.
+
+# Returns
+- A tuple of two vectors: indices of nodes in each partition.
+
+# Example
 ```julia-repl
-julia> partition(coords, [0 1])
+julia> _partition(coords, [0, 1])
 ([1, 2, 3, 9, 10], [4, 5, 6, 7, 8])
-```
+
 """
-function _partition(coords, v)
+function _partition(coords::Matrix, v::Vector)
     n, d = size(coords)
     
     v = v[:]
@@ -39,21 +46,28 @@ function _partition(coords, v)
     return a, b
 end
 
+
 """
-    part_inertial(A, coords)
+    part_inertial(A::SparseMatrixCSC, coords::Matrix)
 
-Compute the bi-partions of graph `A` using inertial method based on the
-`coords` of the graph.
+Compute a bi-partition of the graph `A` using the inertial method based on `coords`.
 
-# Examples
+# Arguments
+- `A::SparseMatrixCSC`: Adjacency matrix of the graph.
+- `coords::Matrix`: Node coordinates used for partitioning.
+
+# Returns
+- A vector of partition labels for each node.
+
+# Example
 ```julia-repl
 julia> part_inertial(A, coords)
  1
  ⋮
  2
-```
+
 """
-function part_inertial(A, coords)
+function part_inertial(A::SparseMatrixCSC, coords::Matrix)
     x = coords[:, 1]
     y = coords[:, 2]
 
@@ -90,22 +104,27 @@ function part_inertial(A, coords)
 end
 
 
-# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
 """
-    part_coordinate(A, coords)
+    part_coordinate(A::SparseMatrixCSC, coords::Matrix)
 
-Compute the bi-partions of graph `A` using coordinate method based on the
-`coords` of the graph.
+Compute a bi-partition of the graph `A` using the coordinate method based on `coords`.
 
-# Examples
+# Arguments
+- `A::SparseMatrixCSC`: Adjacency matrix of the graph.
+- `coords::Matrix`: Node coordinates used for partitioning.
+
+# Returns
+- A vector of partition labels for each node.
+
+# Example
 ```julia-repl
 julia> part_coordinate(A, coords)
  1
  ⋮
  2
-```
+
 """
-function part_coordinate(A, coords)
+function  part_coordinate(A::SparseMatrixCSC, coords::Matrix)
     d = size(coords)[2]
     best_cut = Inf
     p = ones(Int, size(coords)[1])

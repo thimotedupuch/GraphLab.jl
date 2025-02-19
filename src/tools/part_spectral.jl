@@ -1,23 +1,29 @@
 # M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
 using Arpack 
 
+
 """
-    part_spectral(A, fiedler=false)
+    part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
 
-Compute the bi-partions of graph `A` using spectral method.
+Compute a bi-partition of the graph `A` using the spectral method.
 
-If `fiedler` is true, return the entries of the fiedler vector.
+# Arguments
+- `A::SparseMatrixCSC`: Adjacency matrix of the graph.
+- `fiedler::Bool=false`: If `true`, returns the Fiedler vector instead of partition labels.
 
-# Examples
+# Returns
+- A vector of partition labels (1 or 2).
+- If `fiedler=true`, returns the Fiedler vector.
+
+# Example
 ```julia-repl
 julia> part_spectral(A)
  1
  ⋮
  2
-```
-"""
 
-function part_spectral(A)
+"""
+function part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
     n = size(A)[1]
 
     if n > 4*10^4
