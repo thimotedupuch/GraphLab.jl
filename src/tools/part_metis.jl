@@ -1,11 +1,17 @@
 # M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
 using Metis
 """
-    part_metis(A, k, alg)
+    part_metis(A::SparseMatrixCSC, k::Int, alg::Symbol)
 
-Compute the `k` partions of graph `A` using METIS.
+Partition the graph `A` into `k` parts using METIS with the specified algorithm.
 
-The partitioning method `alg` can be :KWAY or :RECURSIVE.
+# Arguments
+- `A`: Adjacency matrix of the graph.
+- `k`: Number of partitions.
+- `alg`: Partitioning algorithm (`:KWAY` or `:RECURSIVE`).
+
+# Output
+- Returns a vector of partition labels for each node.
 
 # Examples
 ```julia-repl
@@ -15,7 +21,7 @@ julia> part_metis(A, 2, :RECURSIVE)
  2
 ```
 """
-function part_metis(A::AbstractSparseMatrix, k::Int, alg::Symbol)
+function part_metis(A::SparseMatrixCSC, k::Int, alg::Symbol)
 
     if alg != :KWAY && alg != :RECURSIVE
         throw(ArgumentError("Invalid algorithm: $alg. Must be :KWAY or :RECURSIVE"))

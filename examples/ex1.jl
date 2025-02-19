@@ -4,7 +4,28 @@ Pkg.activate(@__DIR__)
 using SparseArrays,DelimitedFiles, MAT, Plots, PrettyTables
 using GraphPartitioning
 
-function benchmark(A, coords, prefix)
+"""
+    benchmark(A::SparseArrays.SparseMatrixCSC{Float64, Int64}, coords::Matrix{Int64}, prefix::String)
+
+Run various graph partitioning methods on `A` and save visualizations.
+
+# Arguments
+- `A::SparseMatrixCSC{Float64, Int64}`: Adjacency matrix of the graph.
+- `coords::Matrix{Int64}`: Node coordinates for visualization.
+- `prefix::String`: Filename prefix for saved images.
+
+# Methods Used
+- Coordinate-based (`part_coordinate`)
+- Inertial (`part_inertial`)
+- Spectral (`part_spectral`)
+- METIS recursive bisection (`part_metis`)
+
+# Output
+- Saves partitioned graph visualizations as PNG files.
+"""
+function benchmark( A::SparseMatrixCSC, 
+                    coords::Matrix, 
+                    prefix::String)
     # Partition methods
     p_coord    = GraphPartitioning.part_coordinate(A, coords)
     p_inertial = GraphPartitioning.part_inertial(A, coords)
