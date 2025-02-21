@@ -20,9 +20,8 @@ makedocs(
 )
 
 
-deploydocs(
-    repo="github.com/lechekhabm/GraphPartitioning.jl.git",
+deploydocs(;
+    repo="github.com/lechekhabm/GraphPartitioning.jl",  # Replace with your repo URL
     branch="gh-pages",
-    devbranch="docs",
-    push_preview=true
+    devbranch="main"  # Adjust if your default branch is different
 )
