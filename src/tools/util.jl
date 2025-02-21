@@ -17,7 +17,7 @@ Count the number of edges that cross partitions in the graph `A`.
 ```julia-repl
 julia> count_edge_cut(A, p)
 15
-
+```
 """
 function count_edge_cut(A::AbstractMatrix, p::AbstractVector)
     # Convert adjacency matrix to Graph object
@@ -39,12 +39,12 @@ end
 
 
 """
-    build_adjacency(edges::Matrix{Int}, num_nodes::Int) -> SparseMatrixCSC{Int, Int}
+    build_adjacency(edges::Matrix{Int}, num_nodes::Int)
 
 Construct the adjacency matrix of a graph from an edge list.
 
 # Arguments
-- `edges::Matrix{Int}`: Matrix where each row represents an edge `[u, v]`.
+- `edges::Matrix`: Matrix where each row represents an edge `[u, v]`.
 - `num_nodes::Int`: Total number of nodes in the graph.
 
 # Returns
@@ -54,7 +54,7 @@ Construct the adjacency matrix of a graph from an edge list.
 ```julia-repl
 julia> edges = [1 2; 2 3; 3 1]
 julia> A = build_adjacency(edges, 3)
-
+```
 """
 function build_adjacency(edges::Matrix{Int}, num_nodes::Int)
     adjacency_matrix = spzeros(Int, num_nodes, num_nodes)
@@ -67,7 +67,7 @@ end
 
 
 """
-    build_adjacency(type::String) -> (SparseMatrixCSC, Matrix{Int})
+    build_adjacency(type::String)
 
 Generate a predefined adjacency matrix and corresponding node coordinates.
 
@@ -78,12 +78,12 @@ Generate a predefined adjacency matrix and corresponding node coordinates.
 
 # Returns
 - `A::SparseMatrixCSC`: The sparse adjacency matrix of the graph.
-- `coords::Matrix{Int}`: Node coordinates for visualization.
+- `coords::Matrix`: Node coordinates for visualization.
 
 # Example
 ```julia-repl
 julia> A, coords = build_adjacency("network")
-
+```
 """
 function build_adjacency(type::String)
     if type=="network"

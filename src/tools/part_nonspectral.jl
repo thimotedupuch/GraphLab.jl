@@ -17,7 +17,7 @@ Compute a partition based on `coords` using a direction vector `v`.
 ```julia-repl
 julia> _partition(coords, [0, 1])
 ([1, 2, 3, 9, 10], [4, 5, 6, 7, 8])
-
+```
 """
 function _partition(coords::Matrix, v::Vector)
     n, d = size(coords)
@@ -65,7 +65,7 @@ julia> part_inertial(A, coords)
  1
  ⋮
  2
-
+```
 """
 function part_inertial(A::SparseMatrixCSC, coords::Matrix)
     x = coords[:, 1]
@@ -122,7 +122,7 @@ julia> part_coordinate(A, coords)
  1
  ⋮
  2
-
+```
 """
 function  part_coordinate(A::SparseMatrixCSC, coords::Matrix)
     d = size(coords)[2]

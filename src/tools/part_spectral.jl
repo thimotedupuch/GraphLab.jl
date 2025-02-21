@@ -21,7 +21,7 @@ julia> part_spectral(A)
  1
  ⋮
  2
-
+```
 """
 function part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
     n = size(A)[1]

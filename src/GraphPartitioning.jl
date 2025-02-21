@@ -17,5 +17,17 @@ include("tools/part_mdc.jl")
 include("tools/draw.jl")
 include("tools/util.jl")
 
+export build_adjacency
+export count_edge_cut
+export draw_graph
+export part_coordinate
+export part_inertial
+export part_metis
+export part_spectral
+export recursive_bisection
+export run_graclus
+export run_kahip
+export run_mdc
+
 end # module GraphPartitioning
 

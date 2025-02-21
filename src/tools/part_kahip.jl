@@ -1,5 +1,5 @@
 """
-   run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String, dbg::Bool=false) -> Tuple{String, Vector{Int}, String}
+   run_kahip(A::SparseMatrixCSC, np::Int, preconfiguration::String, dbg::Bool=false)
 
 Run KaHIP patitioning on a graph matrix file.
 
@@ -10,15 +10,16 @@ Run KaHIP patitioning on a graph matrix file.
 - `dbg`: Return KaHIP output and file path if true.
 
 # Returns
-A tuple containing:
+- `partitions::Vector`: Partitioning results if `dbg = false`.
+Or a tuple if `dbg = true`:
 - `stdout::String`: Command output.
-- `partitions::Vector{Int}`: Partitioning results.
+- `partitions::Vector`: Partitioning results.
 - `partition_file::String`: Output file path.
 
 # Example
-```julia-repl
+```julia-repl 
 julia> run_kahip(A, "./graphs/file.graph", 4, "fast")
-
+```
 """
 function run_kahip(A::SparseMatrixCSC, np::Int; preconfiguration::String="fast", dbg::Bool=false)
 

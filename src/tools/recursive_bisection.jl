@@ -25,6 +25,7 @@ julia> _recursive_bisection(part_spectral, 3, A, coords)
  1
  ⋮
  4
+ ```
 """
 function _recursive_bisection(method::Function, levels::Int, A::AbstractSparseMatrix, coords::Union{Matrix, Nothing}=nothing, minpoints::Int=8,vn::Vector{Int}=Int[])
 
@@ -95,7 +96,7 @@ julia> recursive_bisection(part_spectral, 4, A, coords)
  1
  ⋮
  4
-
+```
 """
 function recursive_bisection(method::Function, k::Int, A::AbstractSparseMatrix, coords::Union{Matrix, Nothing}=nothing, minpoints::Int=8)
 

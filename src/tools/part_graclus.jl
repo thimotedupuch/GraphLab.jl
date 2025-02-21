@@ -11,7 +11,11 @@ Partition the graph `A` into `np` parts using Graclus.
 - `dbg`: Enable debug output (default: `false`).
 
 # Returns
-- Partitioning result or error if the process fails.
+- `partitions::Vector`: Partitioning results if `dbg = false`.
+Or a tuple if `dbg = true`:
+- `stdout::String`: Command output.
+- `partitions::Vector`: Partitioning results.
+- `partition_file::String`: Output file path.
 """
 function run_graclus(A::SparseMatrixCSC, np::Int; cut_type::String="ncut", local_search::Int=0, dbg::Bool=false)
 
