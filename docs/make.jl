@@ -21,7 +21,9 @@ makedocs(
 
 
 deploydocs(;
-    repo="github.com/lechekhabm/GraphPartitioning.jl",  # Replace with your repo URL
+    repo="github.com/lechekhabm/GraphPartitioning.jl.git",
     branch="gh-pages",
-    devbranch="main"  # Adjust if your default branch is different
+    devbranch="main",
+    forcepush=true,  # Ensure it force-pushes
+    deploy_config=Documenter.GitHubActions()  # Adjust if your default branch is different
 )
