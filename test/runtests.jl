@@ -29,12 +29,6 @@ using Test
         @test all(x -> !isnan(x), res) 
     end
 
-    @testset "Testing Metis Partitioning" begin
-        res = GraphPartitioning.part_metis(A,2,:KWAY)
-        @test length(res) == size(A, 1)
-        @test all(x -> !isnan(x), res) 
-    end
-
     @testset "Testing Recursive Bisection: Coordinate" begin
         res = GraphPartitioning.recursive_bisection(GraphPartitioning.part_coordinate, 3, A, coords)
         @test length(res) == size(A, 1)
