@@ -116,3 +116,39 @@ function build_adjacency(type::String)
 
     return A, coords
 end
+
+
+"""
+    compute_partition_balance(p::AbstractVector) -> Float64
+
+Computes the balance metric of a given graph partitioning.
+
+# Parameters
+- `p::AbstractVector`: A vector where `p[i]` represents the partition index assigned to vertex `i`.
+
+# Returns
+- `Float64`: The balance metric, defined as the ratio of the largest partition size to the ideal partition size.
+  A value close to `1.0` indicates a well-balanced partitioning, while higher values suggest imbalance.
+
+# Example
+```julia-repl
+julia> p = [1, 1, 2, 2, 2, 3, 3, 3, 3]  # Example partitioning
+julia> balance = compute_partition_balance(p)
+julia> println(balance)  # Output close to 1 for balanced partitions
+""" 
+function compute_partition_balance(p::AbstractVector)
+    # Count the number of vertices in each partition
+    partition_sizes = Dict{eltype(p), Int}()
+    
+    for part in p
+        partition_sizes[part] = get(partition_sizes, part, 0) + 1
+    end
+
+    # Compute balance metric
+    n = length(p)
+    k = length(partition_sizes)
+    ideal_size = n / k
+    max_size = maximum(values(partition_sizes))
+
+    return max_size / ideal_size  # Balance metric (1 is ideal)
+end

@@ -22,6 +22,7 @@ GraphPartitioning.draw_graph
 ## Utility Function
 ```@docs
 GraphPartitioning.count_edge_cut
+GraphPartitioning.compute_partition_balance
 ```
 
 ## Interfacing with External Partitioning Tools

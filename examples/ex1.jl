@@ -39,14 +39,22 @@ function benchmark( A::SparseMatrixCSC,
     GraphPartitioning.draw_graph(A, coords, p_metis, file_name=prefix * "_metis.png")
 
     # Compute edge cuts
-    results = [
+    edge_cuts = [
         GraphPartitioning.count_edge_cut(A, p_coord),
         GraphPartitioning.count_edge_cut(A, p_inertial),
         GraphPartitioning.count_edge_cut(A, p_spectral),
         GraphPartitioning.count_edge_cut(A, p_metis)
     ]
 
-    return results
+    # Compute balance ratios
+    balances = [
+        GraphPartitioning.compute_partition_balance(p_coord),
+        GraphPartitioning.compute_partition_balance(p_inertial),
+        GraphPartitioning.compute_partition_balance(p_spectral),
+        GraphPartitioning.compute_partition_balance(p_metis)
+    ]
+
+    return edge_cuts, balances
 end
 
 # List of .mat files
@@ -66,7 +74,7 @@ files = [
 # Directory containing the files
 base_dir = "meshes/"
 
-final_results = Matrix{Any}(undef,length(files),5)
+final_results = Matrix{Any}(undef,length(files),9)
 
 # Process each file
 for (i, file_name) in enumerate(files)
@@ -93,18 +101,29 @@ for (i, file_name) in enumerate(files)
 
     # Run the benchmark function
     println("Processing file: $file_path with prefix: $prefix")
-    results = benchmark(A, coords, prefix)
+    edge_cuts, balances = benchmark(A, coords, prefix)
 
-    final_results[i,1] = file_name
-    final_results[i,2] = results[1]
-    final_results[i,3] = results[2]
-    final_results[i,4] = results[3]
-    final_results[i,5] = results[4]
+    final_results[i, 1] = file_name
+    final_results[i, 2] = edge_cuts[1]
+    final_results[i, 3] = balances[1]  # Balance for part_coordinate
+    final_results[i, 4] = edge_cuts[2]
+    final_results[i, 5] = balances[2]  # Balance for part_inertial
+    final_results[i, 6] = edge_cuts[3]
+    final_results[i, 7] = balances[3]  # Balance for part_spectral
+    final_results[i, 8] = edge_cuts[4]
+    final_results[i, 9] = balances[4]  # Balance for part_metis
    
     # Close the .mat file
     MAT.close(file)
 end
 
 # Pretty print the final results
-header =  ["Mesh Name", "part_coordinate", "part_inertial", "part_spectral", "part_metis"]
+header = [
+    "Mesh Name",
+    "Edge Cut (Coord)", "Balance (Coord)",
+    "Edge Cut (Inertial)", "Balance (Inertial)",
+    "Edge Cut (Spectral)", "Balance (Spectral)",
+    "Edge Cut (METIS)", "Balance (METIS)"
+]
+
 pretty_table(final_results, header=header)
