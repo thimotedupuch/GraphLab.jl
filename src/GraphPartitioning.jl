@@ -10,6 +10,7 @@ include("tools/recursive_bisection.jl")
 include("tools/part_spectral.jl")
 include("tools/part_nonspectral.jl")
 include("tools/part_metis.jl")
+include("tools/part_randsphere.jl")
 include("tools/draw.jl")
 include("tools/util.jl")
 
@@ -21,6 +22,7 @@ export part_coordinate
 export part_inertial
 export part_metis
 export part_spectral
+export part_randsphere
 export recursive_bisection
 
 end # module GraphPartitioning
