@@ -1,4 +1,10 @@
 """
+Malik Lechekhab, Mar 27, 2025
+Yingzhou Li, Feb 09, 2017
+John Gilbert and Shanghua Teng, 1992-1993.
+"""
+
+"""
 Stereographically lift points to the unit sphere in (d+1)-dimensional space.
 
 coords: n × d matrix of points
@@ -78,6 +84,25 @@ function conmap(c::Vector{Float64}, xyz::Matrix{Float64})
     return xyzmap, xymap
 end
 
+
+"""
+    reflector(c::AbstractVector)
+
+Constructs a Householder reflection matrix `Q` that maps the input vector `c` (reversed)
+to a multiple of the first basis vector. This is useful for aligning a given direction with
+a coordinate axis in geometric transformations.
+
+# Arguments
+- `c::AbstractVector`: A real vector of length `d`.
+
+# Returns
+- `Q::Matrix{Float64}`: A `d × d` orthogonal matrix representing the Householder reflection.
+- `r::Float64`: The leading entry of the reflected vector (i.e., norm or signed component).
+
+# Notes
+- Internally, this performs a QR decomposition of the reversed vector `c[end:-1:1]`
+  and adjusts the result to restore the original ordering.
+"""
 function reflector(c)
     d = length(c)
     p = collect(d:-1:1)
@@ -87,6 +112,23 @@ function reflector(c)
     return Q, r
 end
 
+
+"""
+    stereodown(xyz::AbstractMatrix)
+
+Performs the inverse of stereographic projection, mapping points from the unit sphere
+in ℝ^{d} (embedded in ℝ^{d+1}) back to Euclidean space ℝ^{d}.
+
+# Arguments
+- `xyz::AbstractMatrix`: An `n × (d + 1)` matrix where each row is a point on the unit sphere in ℝ^d.
+
+# Returns
+- `xy::Matrix{Float64}`: An `n × d` matrix of projected points in Euclidean space.
+
+# Notes
+- Assumes the last coordinate in each row of `xyz` corresponds to the vertical axis (pole).
+- This operation is the inverse of the stereographic projection performed in `stereoup`.
+"""
 function stereodown(xyz)
     n, dim = size(xyz)
     xy = xyz[:, 1:dim-1] ./ (1 .- xyz[:, dim])  # broadcasting does the repetition
@@ -111,7 +153,7 @@ function sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
     _, d = size(X)
     M = (X' * X) ^ 2
   
-    vv = randn(ntrials, d)*M
+    vv = randn(ntrials, d) * M
     
     bestcut = Inf;
     bestdir = vv[1, :]
@@ -133,6 +175,25 @@ function sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
   
 end
 
+
+"""
+    sepquality(v, A, xyz)
+
+Evaluates the quality of a geometric separator defined by a direction vector `v`,
+by computing the number of graph edges cut by the resulting partition.
+
+# Arguments
+- `v::Vector{Float64}`: A direction vector defining the separating hyperplane (e.g., great circle).
+- `A::SparseMatrixCSC`: The adjacency matrix of the (undirected) graph.
+- `xyz::Matrix{Float64}`: An `n × (d+1)` matrix of vertex coordinates on the unit sphere (in ℝ^{d+1}).
+
+# Returns
+- `cutsize::Int`: The number of edges crossing between the two sides of the partition.
+
+# Notes
+- Vertices are partitioned based on the sign of their projection onto `v`.
+- The number of crossing edges is computed using nonzero entries in `A[a, b]` and `A[b, a]'`.
+"""
 function sepquality(v::Vector{Float64}, A::SparseMatrixCSC, xyz::Matrix{Float64})
     a, b = partition(xyz, v)
     cutsize = nnz(Bool.(A[a, b]) .| Bool.(A[b, a]'))
@@ -142,6 +203,8 @@ end
 
 
 """
+  sepline(A, xy, ntrials)
+
 Try ntrials random straight hyperplanes in Euclidean space.
 
 Arguments:
@@ -181,6 +244,8 @@ function sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
 
 
 """
+  part_randsphere(A, coords; ntrials)
+
 Geometric partitioning using random spheres and lines.
 
 Arguments:
@@ -210,8 +275,6 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
   xyz = stereoup(xy)
 
   # Spherical sperator search
-
-
   csample = min(n, (d + 3)^4)
   bestcut = Inf
   bestdir = bestcpt = fill(NaN, d + 1)
@@ -222,7 +285,7 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
       dc = randn(size(cpt))
       cpt = 0.9 * cpt + dc / (20 * norm(dc))
     end
-    xyzmap, _ = conmap(cpt, xyz) # THINGS WORKING TILL HERE
+    xyzmap, _ = conmap(cpt, xyz)
     circledir, circlecut = sepcircle(A, xyzmap, ninner)
     if circlecut < bestcut
       bestcut = circlecut
@@ -249,6 +312,25 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
   return p
 end
 
+
+"""
+    partition(X, direction)
+
+Splits a set of points into two parts by projecting them onto a given direction vector
+and partitioning at the median projection value.
+
+# Arguments
+- `X::Matrix{Float64}`: An `n × d` matrix of points (each row is a point in ℝ^d or ℝ^{d+1}).
+- `direction::Vector{Float64}`: A direction vector along which to project the points.
+
+# Returns
+- `part1::Vector{Int}`: Indices of points with projection ≤ median (one side of the cut).
+- `part2::Vector{Int}`: Indices of points with projection > median (the other side).
+
+# Notes
+- This ensures a balanced partition by cutting at the median of the projected values.
+- Commonly used to implement great-circle or hyperplane separators.
+"""
 function partition(X::Matrix{Float64}, direction::Vector{Float64})
     proj = X * direction
     threshold = median(proj)
