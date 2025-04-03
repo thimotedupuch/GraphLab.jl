@@ -144,3 +144,26 @@ function draw_graph(A::SparseMatrixCSC, coords::Matrix; file_name::Union{String,
     p = ones(Int, n)
     return draw_graph(A, coords, p, file_name=file_name)
 end
+
+function spy_mat(A::SparseMatrixCSC)
+    f = Figure(resolution = (1000, 1000), backgroundcolor = :transparent)
+
+    ax1 = Axis(f[1, 1],
+        aspect = 1,
+        title = "Original\nnnz = $(nnz(A))",
+        titlesize = 14,
+        titlecolor = :white,
+        backgroundcolor = :transparent,
+        yreversed = true
+    )
+
+   
+    # Plot sparsity patterns
+    spy!(ax1, A, framecolor = :lightgrey, color = :white)
+ 
+
+    # Clean up axis decorations
+    #foreach(hidedecorations!, (ax1))
+
+    return f
+end

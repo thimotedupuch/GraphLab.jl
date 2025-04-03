@@ -7,6 +7,7 @@ using Statistics
 
 # Include all tools
 include("tools/recursive_bisection.jl")
+include("tools/nested_dissection.jl")
 include("tools/part_spectral.jl")
 include("tools/part_nonspectral.jl")
 include("tools/part_metis.jl")
@@ -24,7 +25,9 @@ export part_inertial
 export part_metis
 export part_spectral
 export part_randsphere
+export part_geospectral
 export recursive_bisection
+export nested_dissection
 
 end # module GraphPartitioning
 

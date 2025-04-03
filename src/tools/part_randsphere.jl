@@ -196,7 +196,8 @@ by computing the number of graph edges cut by the resulting partition.
 """
 function sepquality(v::Vector{Float64}, A::SparseMatrixCSC, xyz::Matrix{Float64})
     a, b = partition(xyz, v)
-    cutsize = nnz(Bool.(A[a, b]) .| Bool.(A[b, a]'))
+    # cutsize = nnz(Bool.(A[a, b]) .| Bool.(A[b, a]'))
+    cutsize = nnz((A[a, b] .!= 0) .| (A[b, a]' .!= 0))
   
     return cutsize
 end
