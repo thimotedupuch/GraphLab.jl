@@ -152,3 +152,45 @@ function compute_partition_balance(p::AbstractVector)
 
     return max_size / ideal_size  # Balance metric (1 is ideal)
 end
+
+
+"""
+    grid_graph(n::Int, m::Int, α::Float64)
+
+Returns the adjacency matrix `A::SparseMatrixCSC` and the coordinates `coords::Matrix{Float64}`
+of an `n × m` grid graph rotated by angle `α` (in radians).
+
+Vertices are ordered row-wise: vertex `i,j` has index `(i-1)*m + j`.
+"""
+function grid_graph(n::Int, m::Int, α::Float64)
+    N = n * m
+    A = spzeros(N, N)
+    coords = zeros(2, N)
+
+    # Generate original (unrotated) coordinates and edges
+    for i in 1:n
+        for j in 1:m
+            idx = (i-1)*m + j
+            x, y = j, n - i + 1
+            coords[:, idx] = [x, y]
+            # Right neighbor
+            if j < m
+                neighbor_idx = idx + 1
+                A[idx, neighbor_idx] = 1
+                A[neighbor_idx, idx] = 1
+            end
+            # Bottom neighbor
+            if i < n
+                neighbor_idx = idx + m
+                A[idx, neighbor_idx] = 1
+                A[neighbor_idx, idx] = 1
+            end
+        end
+    end
+
+    # Apply rotation by α
+    R = [cos(α) -sin(α); sin(α) cos(α)]
+    coords .= R * coords
+
+    return A, Matrix(coords')
+end

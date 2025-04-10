@@ -26,9 +26,10 @@ function _partition(coords::Matrix, v::Vector)
     dotprod = coords * v
     split = median(dotprod)
     a = findall(x -> x < split, dotprod)
-    b = findall(x -> x > split, dotprod)
+    b = findall(x -> x >= split, dotprod)
     c = findall(x -> x == split, dotprod)
     nc = length(c)
+    # nc = 0
     
     if nc != 0
         na = length(a)

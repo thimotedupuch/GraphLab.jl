@@ -1,5 +1,14 @@
 using Graphs, AMD, GraphsMatching, JuMP, Cbc
 
+wait_for_key(prompt) = (print(stdout, prompt); read(stdin, 1); nothing)
+
+function get_maximum_matching(g::Graph)
+  match = maximum_weight_matching(g, optimizer_with_attributes(Cbc.Optimizer, "LogLevel" => 0, MOI.Silent() => true));
+  # match.weight ≈ 1
+
+  return match
+end
+
 
 function _vtxsep(gborder, p1border, p2border, match)
     # König’s theorem says: in bipartite graphs, the size of a maximum matching = size of a minimum vertex cover.
@@ -55,17 +64,17 @@ function _vtxsep(gborder, p1border, p2border, match)
 end
 
 
-function nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{Matrix, Nothing}=nothing, minsep::Int=5)
+function nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{Matrix, Nothing}=nothing, minsep::Int=5, verbose::Bool=false)
     n = size(A, 1)
     p = Vector{Int}(undef, n)
 
-    pA = _nested_dissection(A, method; coords = coords, minsep = minsep)
+    pA = _nested_dissection(A, method; coords = coords, minsep = minsep, verbose = verbose)
 
     return pA
 end
 
 
-function _nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{Matrix, Nothing}=nothing, minsep::Int)
+function _nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{Matrix, Nothing}=nothing, minsep::Int, verbose::Bool)
     n = size(A, 1)
     perm = zeros(1, n)
 
@@ -75,16 +84,16 @@ function _nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{
     comp_count = size(components)[1]
     offset = 0
 
-    println("🔪 \e[32;1mNumber of components: $comp_count.\e[0m")
+   @info "🔪 Number of connected components: $comp_count"
     numbered = 0
-    for component in components
+    for (i, component) in enumerate(components)
 
         nC = length(component)
         A_sub = A[component, component]
-
+        @info "🧩 Component $i with $nC nodes"
         if nC <= minsep
-        println("🍃 Leaf reached.")
-        pA = amd(SparseMatrixCSC{Float64, Int64}(A_sub)) # Approximate Minimum Degree ordering
+        @info "🍃 Leaf reached with $nC nodes"
+        pA = symamd(SparseMatrixCSC{Float64, Int64}(A_sub)) # Approximate Minimum Degree ordering
         else
         sub_coords = coords === nothing ? nothing : coords[component, :]
         if sub_coords === nothing
@@ -104,7 +113,7 @@ function _nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{
 
             if isempty(p1border)
             # Disconnected, sperator is empty
-            println("Graph is disconnected")
+            @warn "❌ Separator is empty (disconnected subgraph?)"
             return Int[], p_sub1, p_sub2, p_sub
             end
 
@@ -122,54 +131,63 @@ function _nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{
         end
 
         # Compute maximum matching
-
-        match = maximum_weight_matching(gborder, optimizer_with_attributes(Cbc.Optimizer, "LogLevel" => 0));
-        # match.weight ≈ 1
+        match =  get_maximum_matching(gborder)
 
         sep,_,_ = _vtxsep(gborder, p1border, p2border, match);
 
         vtx1 = setdiff(p_sub1, sep)
         vtx2 = setdiff(p_sub2, sep)
-
-        @show(sep)
-        @show(vtx1)
-        @show(vtx2)
         
-      if sub_coords === nothing
-        q1 = _nested_dissection(A_sub[vtx1, vtx1], method; minsep = minsep)
-        q2 = _nested_dissection(A_sub[vtx2, vtx2], method; minsep = minsep)
+        if verbose
+          display(draw_graph(A_sub, sub_coords, p_sub))
+          wait_for_key("Press Enter to continue...")
+        end
+        # @show(sep)
+        # @show(vtx1)
+        # @show(vtx2)
+        
+      @info "↙️ Recursing on vtx1 (size = $(length(vtx1)))"
+      q1 = sub_coords === nothing ? 
+                _nested_dissection(A_sub[vtx1, vtx1], method; minsep=minsep, verbose=verbose) :
+                _nested_dissection(A_sub[vtx1, vtx1], method; coords=sub_coords[vtx1, :], minsep=minsep, verbose=verbose)
+
+      @info "↘️ Recursing on vtx2 (size = $(length(vtx2)))"
+      q2 = sub_coords === nothing ? 
+                _nested_dissection(A_sub[vtx2, vtx2], method; minsep=minsep, verbose=verbose) :
+                _nested_dissection(A_sub[vtx2, vtx2], method; coords=sub_coords[vtx2, :], minsep=minsep, verbose=verbose)
+        
+      if q1 === nothing
+        q1 = []
       else
-        q1 = _nested_dissection(A_sub[vtx1, vtx1], method; coords = sub_coords[vtx1, :], minsep = minsep)
-        q2 = _nested_dissection(A_sub[vtx2, vtx2], method; coords = sub_coords[vtx2, :], minsep = minsep)
-      end
-        
-
         q1 = vec(Int.(q1))
-        q2 = vec(Int.(q2))
-
         q1 = filter(!=(0), q1)
+      end
+    
+      if q2 === nothing
+        q2 = []
+      else
+        q2 = vec(Int.(q2))
         q2 = filter(!=(0), q2)
-
-        @show(q1)
-        @show(q2)
-
-        @show(vtx1[q1])
-        @show(vtx2[q2])
+      end
 
         pA = vcat(vtx1[q1], vtx2[q2], sep)
+        @info "🧩 Assembled perm length = $(length(pA)), expected = $(size(A_sub, 1))"
+
 
         if length(pA) != size(A_sub, 1)
             @warn "Wrong permutation length" length_pA = length(pA) expected = size(A_sub, 1)
             return collect(1:size(A_sub, 1))  # fallback: identity permutation
         end
 
-        @show(pA)
 
-        return pA
+
+        # return pA
         end
         perm[numbered + 1:numbered + nC] = component[pA]
         numbered = numbered + nC
 
-        return perm
+        @info "✅ Final permutation size: $(length(perm))"
+
+        return vec(Int.(perm))
     end
 end

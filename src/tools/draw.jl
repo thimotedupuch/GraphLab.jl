@@ -31,12 +31,12 @@ function _vis_graph(A::SparseMatrixCSC,
       dropseed = true
     )
     
-    intra_edge_width = 1.0  # Line width for intra-cluster edges
-    inter_edge_width = 0.1  # Line width for inter-cluster edges
+    intra_edge_width = 4.0  # Line width for intra-cluster edges
+    inter_edge_width = 0.2  # Line width for inter-cluster edges
     edge_opacity = 1.0      # Transparency for edges
     inter_edge_color = Colors.colorant"gray" # Color for inter-cluster edges
     intra_edge_color = nothing        # Color for intra-cluster edges
-    marker_size = 4                   # Marker size for scatter points
+    marker_size = 20                  # Marker size for scatter points
 
     # Function to plot lines (edges) for given indices
     function _plot_lines!(ax, Y, i, j, idx, color, lwd)
@@ -50,8 +50,13 @@ function _vis_graph(A::SparseMatrixCSC,
     y_min, y_max = extrema(coords[:, 2])  # y-values
 
     # Compute aspect ratio
+    margin_ratio = 0.05
     x_range = x_max - x_min
     y_range = y_max - y_min
+    x_min -= margin_ratio * x_range
+    x_max += margin_ratio * x_range
+    y_min -= margin_ratio * y_range
+    y_max += margin_ratio * y_range
     aspect_ratio = x_range / y_range
     
     height = 800
@@ -89,7 +94,8 @@ function _vis_graph(A::SparseMatrixCSC,
     scatter!(ax, coords[:, 1], coords[:, 2], color = p, colormap = cmap, markersize = marker_size)
     #ax.aspect = DataAspect()  # Keep aspect ratio consistent
     
-    tightlimits!(ax)          # Fit the view to the data
+    # tightlimits!(ax)          # Fit the view to the data
+    limits!(ax, x_min, x_max, y_min, y_max)
     resize_to_layout!(f)
     #ax.aspect = DataAspect()
     return f
