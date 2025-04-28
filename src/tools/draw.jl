@@ -151,6 +151,22 @@ function draw_graph(A::SparseMatrixCSC, coords::Matrix; file_name::Union{String,
     return draw_graph(A, coords, p, file_name=file_name)
 end
 
+
+"""
+    spy_mat(A::SparseMatrixCSC)
+
+Generates a visual sparsity plot of the sparse matrix `A`.
+
+# Arguments
+- `A::SparseMatrixCSC`: The sparse matrix to visualize.
+
+# Returns
+- `f::Figure`: The generated `Figure` object containing the sparsity plot.
+
+# Notes
+- Uses reversed y-axis to match standard matrix visualization conventions.
+"""
+
 function spy_mat(A::SparseMatrixCSC)
     f = Figure(resolution = (1000, 1000), backgroundcolor = :transparent)
 
