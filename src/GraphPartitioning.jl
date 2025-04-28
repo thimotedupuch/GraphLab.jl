@@ -4,6 +4,8 @@ module GraphPartitioning
 using LinearAlgebra
 using SparseArrays
 using Statistics
+using GraphsOptim: min_vertex_cover
+using Random
 
 # Include all tools
 include("tools/recursive_bisection.jl")

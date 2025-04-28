@@ -1,5 +1,5 @@
 # M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch  
-
+using Random
 
 """
     _partition(coords::Matrix, v::Vector)
@@ -86,7 +86,10 @@ function part_inertial(A::SparseMatrixCSC, coords::Matrix)
         [sxy sxx]]
 
     # 3. Compute the eigenvector associated with the smallest eigenvalue of M.
-    eig_vals, eig_vecs = eigs(M; which=:SR, ncv = 300, nev=1)
+    # v0 = ones(size(M)[1])
+    local_rng = MersenneTwister(1234)
+    v0 = randn(local_rng, size(M)[1])
+    eig_vals, eig_vecs = eigs(M; which=:SR, nev=1, v0=v0)
 
     # 4. Partition the nodes around line L 
     #    (use may use the function partition(coords, eigv))
