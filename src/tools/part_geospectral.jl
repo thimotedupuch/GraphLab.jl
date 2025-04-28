@@ -1,3 +1,13 @@
+# ------------------------------------------------------------------------
+# Based on work by:
+# - John R. Gilbert (UC Santa Barbara): http://www.cs.ucsb.edu/~gilbert/
+# - Shang-Hua Teng (University of Southern California): http://www-bcf.usc.edu/~shanghua/
+# - Yingzhou Li (Fudan University): https://yingzhouli.com
+#
+# Note:
+# The following acknowledgement is from Yingzhou Li's original codebase:
+# "Thanks to Tim Davis for updating the toolbox to MATLAB 5"
+
 using Arpack
 
 

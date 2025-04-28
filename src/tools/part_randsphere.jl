@@ -1,8 +1,13 @@
-"""
-Malik Lechekhab, Mar 27, 2025
-Yingzhou Li, Feb 09, 2017
-John Gilbert and Shanghua Teng, 1992-1993.
-"""
+# ------------------------------------------------------------------------
+# Based on work by:
+# - John R. Gilbert (UC Santa Barbara): http://www.cs.ucsb.edu/~gilbert/
+# - Shang-Hua Teng (University of Southern California): http://www-bcf.usc.edu/~shanghua/
+# - Yingzhou Li (Fudan University): https://yingzhouli.com
+#
+# Note:
+# The following acknowledgement is from Yingzhou Li's original codebase:
+# "Thanks to Tim Davis for updating the toolbox to MATLAB 5"
+# Source: https://github.com/YingzhouLi/meshpart/
 
 """
 Stereographically lift points to the unit sphere in (d+1)-dimensional space.
