@@ -7,6 +7,7 @@
 # Note:
 # The following acknowledgement is from Yingzhou Li's original codebase:
 # "Thanks to Tim Davis for updating the toolbox to MATLAB 5"
+# Source: https://github.com/YingzhouLi/meshpart/
 
 using Graphs, AMD, GraphsMatching, JuMP, Cbc
 

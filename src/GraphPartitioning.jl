@@ -14,6 +14,7 @@ include("tools/part_nonspectral.jl")
 include("tools/part_metis.jl")
 include("tools/part_randsphere.jl")
 include("tools/part_geospectral.jl")
+include("tools/part_sfc.jl")
 include("tools/draw.jl")
 include("tools/util.jl")
 
@@ -27,6 +28,7 @@ export part_metis
 export part_spectral
 export part_randsphere
 export part_geospectral
+export part_sfc
 export recursive_bisection
 export nested_dissection
 

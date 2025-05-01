@@ -31,12 +31,12 @@ function _vis_graph(A::SparseMatrixCSC,
       dropseed = true
     )
     
-    intra_edge_width = 4.0  # Line width for intra-cluster edges
+    intra_edge_width = 1.0  # Line width for intra-cluster edges
     inter_edge_width = 0.2  # Line width for inter-cluster edges
     edge_opacity = 1.0      # Transparency for edges
     inter_edge_color = Colors.colorant"gray" # Color for inter-cluster edges
     intra_edge_color = nothing        # Color for intra-cluster edges
-    marker_size = 20                  # Marker size for scatter points
+    marker_size = 1              # Marker size for scatter points
 
     # Function to plot lines (edges) for given indices
     function _plot_lines!(ax, Y, i, j, idx, color, lwd)
