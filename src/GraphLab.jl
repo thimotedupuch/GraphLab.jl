@@ -1,4 +1,4 @@
-module GraphPartitioning
+module GraphLab
 
 # Load required libraries
 using LinearAlgebra
@@ -34,5 +34,5 @@ export part_adaptive_sfc
 export recursive_bisection
 export nested_dissection
 
-end # module GraphPartitioning
+end # module GraphLab
 

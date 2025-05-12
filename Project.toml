@@ -1,6 +1,6 @@
-name = "GraphPartitioning"
+name = "GraphLab"
 uuid = "d38e4d1f-8cde-4b91-b345-2d365d6c1ed6"
-authors = ["Your Name <youremail@example.com>"]
+authors = ["Malik Lechekhab <malik.lechekhab@usi.ch>"]
 description = "A Julia package for graph partitioning."
 version = "0.1.0"
 

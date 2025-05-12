@@ -1,31 +1,36 @@
-# GraphPartitioning.jl
+[![CI](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml)
+[![Documentation](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/docs.yml/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev)
+[![License](https://img.shields.io/github/license/lechekhabm/GraphLab.jl)](https://github.com/lechekhabm/GraphLab.jl/blob/main/LICENSE)
 
-This is the code repository for ``GraphPartitioning.jl``, a toolbox for graph partitioning algorithms in Julia. It provides a framework to compare, benchmark, and analyze various graph partitioning techniques. The framework supports both non-recursive and recursive methods with geometric information, like coordinate and inertial bisection, as well as methods without geometric information, such as spectral bisection. It makes it easy to evaluate and compare the outputs of different methods, helping users understand their trade-offs and applications.
 
-Feel free to contribute or report issues on the GitHub repository for **GraphPartitioning.jl**. Happy partitioning!
+# GraphLab.jl
+
+This is the code repository for ``GraphLab.jl``, a toolbox for graph partitioning algorithms in Julia. It provides a framework to compare, benchmark, and analyze various graph partitioning techniques. The framework supports both non-recursive and recursive methods with geometric information, like coordinate and inertial bisection, as well as methods without geometric information, such as spectral bisection. It makes it easy to evaluate and compare the outputs of different methods, helping users understand their trade-offs and applications.
+
+Feel free to contribute or report issues on the GitHub repository for **GraphLab.jl**. Happy partitioning!
 
 ## Getting Started
 
 ### Installation
 To install the package from GitHub and add it to your working environment, follow these steps:
 
-1. Add the ``GraphPartitioning.jl`` to you project using the Julia command:
+1. Add the ``GraphLab.jl`` to you project using the Julia command:
    ```julia
    using Pkg
-   Pkg.add(url="https://github.com/lechekhabm/GraphPartitioning.jl")
+   Pkg.add(url="https://github.com/lechekhabm/GraphLab.jl")
    ```
    **Note:** If you have an SSH key set up with GitHub, you can install the package using SSH:
    ```julia
-   Pkg.add(url="https://<YOUR_GITHUB_TOKEN>@github.com/lechekhabm/GraphPartitioning.jl.git")
+   Pkg.add(url="https://<YOUR_GITHUB_TOKEN>@github.com/lechekhabm/GraphLab.jl.git")
    ```
    Replace `<YOUR_GITHUB_TOKEN>` with a valid token that has repository read access.
 
 3. Basic Example:
    ```julia
-   using GraphPartitioning
-   A, coords = GraphPartitioning.build_adjacency("network")
-   p = GraphPartitioning.part_spectral(A)
-   GraphPartitioning.draw_graph(A, coords, p, file_name="test.png")
+   using GraphLab
+   A, coords = GraphLab.build_adjacency("network")
+   p = GraphLab.part_spectral(A)
+   GraphLab.draw_graph(A, coords, p, file_name="test.png")
    ```
    
   For further details on the package and its functions, see [Paper](www.google.com).
@@ -40,16 +45,16 @@ Refer to the source code and `Project.toml` files within the `examples/` directo
 
 ## Running Examples
 
-The package includes example scripts in the `GraphPartitioning/examples/` directory. These scripts demonstrate how to use the package to benchmark and compare different graph partitioning methods.
+The package includes example scripts in the `GraphLab/examples/` directory. These scripts demonstrate how to use the package to benchmark and compare different graph partitioning methods.
 
 To run these examples you need to clone the repo using the command:
    ```bash
-   git clone https://github.com/lechekhabm/GraphPartitioning.jl
+   git clone https://github.com/lechekhabm/GraphLab.jl
    ```
 
 ### Example 1: Comparing Partitioning Methods
 
-**Script:** `GraphPartitioning.jl/examples/ex1.jl`
+**Script:** `GraphLab.jl/examples/ex1.jl`
 
 This example compares different graph partitioning methods, including:
 
@@ -93,7 +98,7 @@ The script evaluates these methods on a series of different graphs, providing in
 1. Navigate to the `examples` directory:
 
    ```bash
-   cd GraphPartitioning.jl/examples
+   cd GraphLab.jl/examples
    ```
 
 2. Run the example script in the Julia or directly from the terminal:
@@ -104,7 +109,7 @@ The script evaluates these methods on a series of different graphs, providing in
 
 ### Example 2: Recursive Bisection
 
-**Script:** `GraphPartitioning.jl/examples/ex2.jl`
+**Script:** `GraphLab.jl/examples/ex2.jl`
 
 This example demonstrates recursive bisection using different methods, including:
 
@@ -145,7 +150,7 @@ This example demonstrates recursive bisection using different methods, including
 1. Navigate to the `examples` directory:
 
    ```bash
-   cd GraphPartitioning.jl/examples
+   cd GraphLab.jl/examples
    ```
 
 2. Run the example script in the Julia or directly from the terminal:

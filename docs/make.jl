@@ -1,17 +1,16 @@
 using Documenter
-using GraphPartitioning  # Make sure it uses the locally developed version
+using GraphLab  # Make sure it uses the locally developed version
 
-# println(nameof(GraphPartitioning))  # Should print GraphPartitioning
 # println("Defined functions: ", names(GraphPartitioning, all=true))
 
 makedocs(
-    sitename = "GraphPartitioning.jl",
-    modules  = [GraphPartitioning],
+    sitename = "GraphLab.jl",
+    modules  = [GraphLab],
     format   = Documenter.HTML(
         prettyurls = false,  # Ensure local testing works
         collapselevel = 1    # Controls sidebar depth (1 = show subsections)
     ),
-    repo     = "https://github.com/lechekhabm/GraphPartitioning.jl",
+    repo     = "https://github.com/lechekhabm/GraphLab.jl",
     pages    = [
         "Home" => "index.md",
         "Documentation"  => "documentation.md"
@@ -21,7 +20,7 @@ makedocs(
 
 
 deploydocs(;
-    repo="github.com/lechekhabm/GraphPartitioning.jl.git",
+    repo="github.com/lechekhabm/GraphLab.jl.git",
     branch="gh-pages",
     devbranch="main",
     forcepush=true,  # Ensure it force-pushes

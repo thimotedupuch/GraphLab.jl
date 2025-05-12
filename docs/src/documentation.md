@@ -1,32 +1,32 @@
 # Documentation
 ## Graph Construction
 ```@docs
-GraphPartitioning.build_adjacency
+GraphLab.build_adjacency
 ```
 ## Native Partitioning Methods
 ```@docs
-GraphPartitioning.part_coordinate
-GraphPartitioning.part_inertial
-GraphPartitioning.part_spectral
-GraphPartitioning.part_metis
+GraphLab.part_coordinate
+GraphLab.part_inertial
+GraphLab.part_spectral
+GraphLab.part_metis
 ```
 ## Recursive Bisection
 ```@docs
-GraphPartitioning.recursive_bisection
+GraphLab.recursive_bisection
 ```
 ## Visualization
 ```@docs
-GraphPartitioning.draw_graph
+GraphLab.draw_graph
 ```
 
 ## Utility Function
 ```@docs
-GraphPartitioning.count_edge_cut
-GraphPartitioning.compute_partition_balance
+GraphLab.count_edge_cut
+GraphLab.compute_partition_balance
 ```
 
 ## Interfacing with External Partitioning Tools
-To integrate with graph partitioning tools such as KaHIP, Graclus, and MDC, we provide utility functions for exporting graph structures, executing external commands, and managing dependencies. These functions streamline the workflow, ensuring compatibility with external software while maintaining interoperability with `GraphPartitioning.jl`.
+To integrate with graph partitioning tools such as KaHIP, Graclus, and MDC, we provide utility functions for exporting graph structures, executing external commands, and managing dependencies. These functions streamline the workflow, ensuring compatibility with external software while maintaining interoperability with `GraphLab.jl`.
 
 ### Writing a Graph File for Partitioning Tools
 This function generates a graph file compatible with tools like KaHIP, Graclus, and MDC from a symmetric adjacency matrix.
