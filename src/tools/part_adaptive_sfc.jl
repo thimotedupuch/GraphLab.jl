@@ -60,6 +60,7 @@ and "Space-filling Curves for Partitioning Adaptively Refined Meshes" (Sasidhara
 ```julia-repl
 julia> part = part_adaptive_sfc(A, coords, 4)
 [1, 1, 2, 2, 3, 4, 4, ...]
+```
 """
 function part_adaptive_sfc(A::SparseMatrixCSC, coords::Matrix, k::Int=2)
     n = size(A, 1);
@@ -99,6 +100,7 @@ Compute the axis-aligned bounding box for a set of 2D points.
 ```julia-repl
 julia> _bounding_box([1.0 2.0; 3.0 4.0; -1.0 5.0])
 ((-1.0, 2.0), (3.0, 5.0))
+```
 """
 function _bounding_box(coords::Matrix{Float64})
     xmin = minimum(coords[:, 1])
@@ -127,6 +129,7 @@ _split a set of 2D points along a specified dimension at the median.
 ```julia-repl
 julia> left, right, _splitval = _split([1.0 2.0; 3.0 4.0; 0.0 5.0], 1)
 ([0.0 5.0; 1.0 2.0], [3.0 4.0], 1.0)
+```
 """
 function _split(coords::Matrix{Float64}, dim::Int)
     perm = sortperm(coords[:, dim])
@@ -156,6 +159,7 @@ Recursively build a 2D kd-tree from a set of points. Leaf nodes contain the data
 ```julia-repl
 julia> tree = _build_tree([1.0 2.0; 3.0 4.0; 0.0 5.0])
 KdNode(...)
+```
 """
 function _build_tree(coords::Matrix{Float64}, is_root::Bool=true)
     n = size(coords, 1)
@@ -200,6 +204,7 @@ At each leaf node, it collects the stored data into an accumulator.
 ```julia-repl
 julia> data = _traverse_kd(tree)
 [[x1, y1, id1], [x2, y2, id2], ...]
+```
 """
 function _traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any} = [])
     node.entry = entry
@@ -266,6 +271,7 @@ Compute the center point of a bounding box.
 ```julia-repl
 julia> _bbox_center(((0.0, 0.0), (2.0, 4.0)))
 (1.0, 2.0)
+```
 """
 function _bbox_center(bbox)
     (xmin, ymin), (xmax, ymax) = bbox
@@ -292,6 +298,7 @@ Determine the traversal order of child nodes in a kd-tree based on entry and exi
 ```julia-repl
 julia> _step(:L, :R, 1, (0.0, 0.5), 0.3)
 [:left, :right]
+```
 """
 function _step(entry::Symbol, exit::Symbol, _splitdim::Int, entry_pt::Tuple{Float64, Float64}, _splitval::Float64)
     type = _order_type(entry, exit)
@@ -349,6 +356,7 @@ This function retrieves either the left or right child node depending on the sid
 ```julia-repl
 julia> _get_child(node, :left)
 KdNode(...)
+```
 """
 function _get_child(node::KdNode, side::Symbol)
     if node._splitdim == 1
@@ -383,6 +391,7 @@ curve traversal rules (using `:cis` and `:tran` order types and `:parallel` / `:
 ```julia-repl
 julia> _get_child_entry_exit(:L, :R, 1, :left)
 (:L, :R)
+```
 """
 function _get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, _splitdim::Int, side::Symbol)
     type = _order_type(parent_entry, parent_exit)
@@ -504,6 +513,7 @@ julia> _order_type(:L, :R)
 :tran
 julia> _order_type(:T, :R)
 :cis
+```
 """
 function _order_type(entry::Symbol, exit::Symbol)
     if (entry == :L && exit == :R) || (entry == :R && exit == :L) ||
@@ -534,6 +544,7 @@ julia> _get_alignment(:L, 1)
 :parallel
 julia> _get_alignment(:T, 1)
 :perpendicular
+```
 """
 function _get_alignment(entry::Symbol, _splitdim::Int)
     if (_splitdim == 1 && (entry == :L || entry == :R)) ||
@@ -562,6 +573,7 @@ julia> _opposite_dir(:L)
 :R
 julia> _opposite_dir(:T)
 :B
+```
 """
 function _opposite_dir(dir::Symbol)::Symbol
     if dir == :T
@@ -598,6 +610,7 @@ be a node ID (1-based indexing), and the result maps each node ID to its partiti
 ```julia-repl
 julia> _get_partition([1, 2, 3, 4, 5, 6], 2)
 [1, 1, 1, 2, 2, 2]
+```
 """
 function _get_partition(v::AbstractVector, k::Int)
     n = length(v)

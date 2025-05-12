@@ -22,7 +22,7 @@ julia> part_sfc(A, coords, 4, :morton)
  1
  ⋮
  4
-
+```
 """
 function part_sfc(A::SparseMatrixCSC, coords::Matrix, k::Int=2, curve::Symbol=:gilbert)
     N = size(coords, 1);

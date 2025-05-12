@@ -135,6 +135,7 @@ Computes the balance metric of a given graph partitioning.
 julia> p = [1, 1, 2, 2, 2, 3, 3, 3, 3]  # Example partitioning
 julia> balance = compute_partition_balance(p)
 julia> println(balance)  # Output close to 1 for balanced partitions
+```
 """ 
 function compute_partition_balance(p::AbstractVector)
     # Count the number of vertices in each partition
