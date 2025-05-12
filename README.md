@@ -1,12 +1,14 @@
 [![CI](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml)
 [![Documentation](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/docs.yml/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev)
+[![Dev](https://lechekhabm.github.io/GraphLab.jl/dev/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev)
+[![Stable](https://lechekhabm.github.io/GraphLab.jl/stable/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev/dev_api/)
 [![License](https://img.shields.io/github/license/lechekhabm/GraphLab.jl)](https://github.com/lechekhabm/GraphLab.jl/blob/main/LICENSE)
 
 
 # GraphLab.jl
 
 <!-- This is the code repository for ``GraphLab.jl``, a toolbox for graph partitioning algorithms in Julia. It provides a framework to compare, benchmark, and analyze various graph partitioning techniques. The framework supports both non-recursive and recursive methods with geometric information, like coordinate and inertial bisection, as well as methods without geometric information, such as spectral bisection. It makes it easy to evaluate and compare the outputs of different methods, helping users understand their trade-offs and applications. -->
-`GraphLab.jl` is a Julia package for exploring, experimenting, and teaching graph partitioning algorithms.
+`GraphLab.jl` is a Julia package for exploring, experimenting, and learning graph partitioning algorithms.
 It provides a growing set of accessible methods, including coordinate, inertial, spectral, and space-filling curve partitioning, alongside recursive partitioning and nested dissection.
 
 The package includes utilities for:
@@ -170,26 +172,30 @@ This example demonstrates recursive bisection using different methods, including
 
 ## Citation
 
-Please cite [XXXX](https://epubs.siam.org/doi/10.1137/21M1392231) in your publications if it helps your research:
+If you use **GraphLab.jl** in your research or teaching, please consider citing our upcoming paper:
 ```
-@article{doi:10.1137/21M1392231,
- author = {Name},
- title = {Tile},
- journal = X},
- volume = {44},
- number = {3},
- pages = {C210-C236},
- year = {2022},
- doi = {10.1137/21M1392231}
+@article{GraphLab2025,
+author = {Malik Lechekhab and collaborators},
+title = {GraphLab.jl: A Julia Framework for Exploring Graph Partitioning},
+journal = {In preparation},
+year = {2025},
+note = {Preprint will be made available at arXiv},
 }
 ```
-See [https://arxiv.org/pdf/2202.06555.pdf](https://arxiv.org/pdf/2202.06555.pdf) for an archived version of the article. 
+We will update the citation once the paper is published.
 
-### Authors
-* ...
+## Authors
 * [Malik Lechekhab](https://www.linkedin.com/in/mlechekhab/) (Institute of Computing, Università della Svizzera italiana)
-
+* [Dimosthenis Pasadakis](https://search.usi.ch/en/people/bfe7763cea5221d043f905ad414e1a8d/pasadakis-dimosthenis) (Institute of Computing, Università della Svizzera italiana)
 * [Aryan Eftekhari](https://scholar.google.com/citations?user=GiugKBsAAAAJ&hl=en) (Institute of Computing, Università della Svizzera italiana)
+* [Roger Käppeli](https://math.ethz.ch/research/applied-mathematics-numerical-analysis-scientific-computing/roger-kaeppeli.html) (Department of Mathematics, ETH Zürich)
+* [Olaf Schenk](https://search.usi.ch/en/people/9a52a2fdb8d3d26ec16fb1569b590909/schenk-olaf) (Institute of Computing, Università della Svizzera italiana)
 
-### Acknowledgments  
-We would like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.
+## Acknowledgments  
+- Jeroen Baert, Libmorton: C++ Morton Encoding/Decoding Library, 2018. [Link](https://github.com/Forceflow/libmorton).
+- Aparna Sasidharan, Aparna, and Snir, Space-filling Curves for Partitioning Adaptively Refined Meshes.
+- Aparna Sasidharan, John R. Gilbert, Shang-Hua Teng, Yingzhou Li, A General Space-filling Curve Algorithm for Partitioning 2D Meshes, In Proceedings of the 2015 IEEE 17th International Conference on High Performance Computing and Communications (HPCC), 2015. DOI: 10.1109/HPCC-CSS-ICESS.2015.192.
+- Simon Byrne, GilbertCurves.jl, [Link](https://github.com/CliMA/GilbertCurves.jl).
+- Jakub Červený, gilbert, [Link](https://github.com/jakubcerveny/gilbert).
+- Yingzhou Li, meshpart Toolbox, [Link](https://github.com/YingzhouLi/meshpart).
+We would also like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.

@@ -25,6 +25,7 @@ deploydocs(;
     repo="github.com/lechekhabm/GraphLab.jl.git",
     branch="gh-pages",
     devbranch="main",
+    versions = ["stable", "v#.#.#", "dev"],  # enable stable badge support
     forcepush=true,  # Ensure it force-pushes
     deploy_config=Documenter.GitHubActions()  # Adjust if your default branch is different
 )
