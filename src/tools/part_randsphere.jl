@@ -15,7 +15,7 @@ Stereographically lift points to the unit sphere in (d+1)-dimensional space.
 coords: n × d matrix of points
 Returns: n × (d+1) matrix on the unit sphere
 """
-function stereoup(coords::Matrix{Float64})
+function _stereoup(coords::Matrix{Float64})
     n, d = size(coords)
     lifted = zeros(n, d+1)
 
@@ -32,16 +32,16 @@ end
 
 
 """
-Approximate centerpoint by coordinate-wise median of a random sample.
+Approximate _centerpoint by coordinate-wise median of a random sample.
 
 Arguments:
 - X::Matrix{Float64}: n × d data matrix
 - sample_size::Int: number of random rows to sample
 
 Returns:
-- center::Vector{Float64}: estimated centerpoint
+- center::Vector{Float64}: estimated _centerpoint
 """
-function centerpoint(X::Matrix{Float64}, sample_size::Int)
+function _centerpoint(X::Matrix{Float64}, sample_size::Int)
     n, d = size(X)
     idx = rand(1:n, min(sample_size, n))
     sample = X[idx, :]
@@ -53,17 +53,17 @@ end
 Conformal map that moves `center` to the origin on the unit sphere.
 
 Arguments:
-- center::Vector{Float64}: centerpoint on the sphere (length d+1)
+- center::Vector{Float64}: _centerpoint on the sphere (length d+1)
 - X::Matrix{Float64}: n × (d+1) matrix of lifted points
 
 Returns:
 - Y::Matrix{Float64}: transformed points (same size as X)
 """
-function conmap(c::Vector{Float64}, xyz::Matrix{Float64})
+function _conmap(c::Vector{Float64}, xyz::Matrix{Float64})
     d = size(xyz, 2)
   
     # Compute reflection and stretch
-    Q, r = reflector(c)
+    Q, r = _reflector(c)
     alpha = sqrt((1+r)/(1-r))
   
     # Reflect
@@ -76,11 +76,11 @@ function conmap(c::Vector{Float64}, xyz::Matrix{Float64})
       xyzref[norths, :] = zeros(length(norths), d)
     end
   
-    xyref = stereodown(xyzref)
+    xyref = _stereodown(xyzref)
   
     # Stretch
     xymap = xyref ./ alpha
-    xyzmap = stereoup(xymap)
+    xyzmap = _stereoup(xymap)
   
     if isempty(norths)
       xyzmap[norths,:] = xyzn
@@ -91,7 +91,7 @@ end
 
 
 """
-    reflector(c::AbstractVector)
+    _reflector(c::AbstractVector)
 
 Constructs a Householder reflection matrix `Q` that maps the input vector `c` (reversed)
 to a multiple of the first basis vector. This is useful for aligning a given direction with
@@ -108,7 +108,7 @@ a coordinate axis in geometric transformations.
 - Internally, this performs a QR decomposition of the reversed vector `c[end:-1:1]`
   and adjusts the result to restore the original ordering.
 """
-function reflector(c)
+function _reflector(c)
     d = length(c)
     p = collect(d:-1:1)
     Q, r = qr(c[collect(d:-1:1)])
@@ -119,7 +119,7 @@ end
 
 
 """
-    stereodown(xyz::AbstractMatrix)
+    _stereodown(xyz::AbstractMatrix)
 
 Performs the inverse of stereographic projection, mapping points from the unit sphere
 in ℝ^{d} (embedded in ℝ^{d+1}) back to Euclidean space ℝ^{d}.
@@ -132,9 +132,9 @@ in ℝ^{d} (embedded in ℝ^{d+1}) back to Euclidean space ℝ^{d}.
 
 # Notes
 - Assumes the last coordinate in each row of `xyz` corresponds to the vertical axis (pole).
-- This operation is the inverse of the stereographic projection performed in `stereoup`.
+- This operation is the inverse of the stereographic projection performed in `_stereoup`.
 """
-function stereodown(xyz)
+function _stereodown(xyz)
     n, dim = size(xyz)
     xy = xyz[:, 1:dim-1] ./ (1 .- xyz[:, dim])  # broadcasting does the repetition
   
@@ -143,6 +143,8 @@ end
 
 
 """
+  _sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
+  
 Try ntrials random great circle cuts on unit-sphere data.
 
 Arguments:
@@ -154,7 +156,7 @@ Returns:
 - bestdir::Vector{Float64}: direction vector of best cut
 - mincut::Float64: minimum edge cut found
 """
-function sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
+function _sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
     _, d = size(X)
     M = (X' * X) ^ 2
   
@@ -167,7 +169,7 @@ function sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
       v = vv[i, :]
   
       if norm(v) != 0
-        currentcut = sepquality(v, A, X)
+        currentcut = _sepquality(v, A, X)
       end
   
       if bestcut > currentcut
@@ -182,10 +184,10 @@ end
 
 
 """
-    sepquality(v, A, xyz)
+    _sepquality(v, A, xyz)
 
 Evaluates the quality of a geometric separator defined by a direction vector `v`,
-by computing the number of graph edges cut by the resulting partition.
+by computing the number of graph edges cut by the resulting _partition.
 
 # Arguments
 - `v::Vector{Float64}`: A direction vector defining the separating hyperplane (e.g., great circle).
@@ -193,14 +195,14 @@ by computing the number of graph edges cut by the resulting partition.
 - `xyz::Matrix{Float64}`: An `n × (d+1)` matrix of vertex coordinates on the unit sphere (in ℝ^{d+1}).
 
 # Returns
-- `cutsize::Int`: The number of edges crossing between the two sides of the partition.
+- `cutsize::Int`: The number of edges crossing between the two sides of the _partition.
 
 # Notes
-- Vertices are partitioned based on the sign of their projection onto `v`.
+- Vertices are _partitioned based on the sign of their projection onto `v`.
 - The number of crossing edges is computed using nonzero entries in `A[a, b]` and `A[b, a]'`.
 """
-function sepquality(v::Vector{Float64}, A::SparseMatrixCSC, xyz::Matrix{Float64})
-    a, b = partition(xyz, v)
+function _sepquality(v::Vector{Float64}, A::SparseMatrixCSC, xyz::Matrix{Float64})
+    a, b = _partition(xyz, v)
     # cutsize = nnz(Bool.(A[a, b]) .| Bool.(A[b, a]'))
     cutsize = nnz((A[a, b] .!= 0) .| (A[b, a]' .!= 0))
   
@@ -209,7 +211,7 @@ end
 
 
 """
-  sepline(A, xy, ntrials)
+  _sepline(A, xy, ntrials)
 
 Try ntrials random straight hyperplanes in Euclidean space.
 
@@ -222,7 +224,7 @@ Returns:
 - bestdir::Vector{Float64}: best direction
 - mincut::Float64: corresponding edge cut
 """
-function sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
+function _sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
     d = size(xy, 2)
   
     _, S, V = svd(xy);
@@ -238,7 +240,7 @@ function sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
     bestdir = vv[1, :]
     for i in 1:ntrials
       v = vv[i, :]
-      cut = sepquality(v, A, xy)
+      cut = _sepquality(v, A, xy)
       if cut < bestcut
         bestcut = cut
         bestdir = v
@@ -252,7 +254,7 @@ function sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
 """
   part_randsphere(A, coords; ntrials)
 
-Geometric partitioning using random spheres and lines.
+Geometric _partitioning using random spheres and lines.
 
 Arguments:
 - A::SparseMatrixCSC: adjacency matrix
@@ -267,8 +269,8 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
 
   # How to split the tries
   nlines = floor(Int, (ntrials / 2) ^ (d / (d + 1))) # number of lines to try (fallback)
-  nouter = ceil(Int, log(ntrials - nlines + 1) / log(20)) # number of centerpoints to try
-  ninner = floor(Int, (ntrials - nlines) / nouter) # number of random directions (great circles) to test for each centerpoint.
+  nouter = ceil(Int, log(ntrials - nlines + 1) / log(20)) # number of _centerpoints to try
+  ninner = floor(Int, (ntrials - nlines) / nouter) # number of random directions (great circles) to test for each _centerpoint.
   nlines = ntrials - nouter * ninner # Rounding
 
   # Normalize coordinates: center and scale
@@ -278,7 +280,7 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
   xy ./= scale
 
   # Project to sphere
-  xyz = stereoup(xy)
+  xyz = _stereoup(xy)
 
   # Spherical sperator search
   csample = min(n, (d + 3)^4)
@@ -286,13 +288,13 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
   bestdir = bestcpt = fill(NaN, d + 1)
 
   for _ in 1:nouter
-    cpt = centerpoint(xyz, csample)
+    cpt = _centerpoint(xyz, csample)
     if 1 - norm(cpt) < sqrt(eps())
       dc = randn(size(cpt))
       cpt = 0.9 * cpt + dc / (20 * norm(dc))
     end
-    xyzmap, _ = conmap(cpt, xyz)
-    circledir, circlecut = sepcircle(A, xyzmap, ninner)
+    xyzmap, _ = _conmap(cpt, xyz)
+    circledir, circlecut = _sepcircle(A, xyzmap, ninner)
     if circlecut < bestcut
       bestcut = circlecut
       bestdir = circledir
@@ -300,15 +302,15 @@ function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::I
     end
   end
 
-  linedir, linecut = sepline(A, xy, nlines)
+  linedir, linecut = _sepline(A, xy, nlines)
 
   if linecut < bestcut
     bestcut = linecut
     bestdir = linedir
-    p1, p2 = partition(xy, linedir)
+    p1, p2 = _partition(xy, linedir)
   else
-    bestmap, _  = conmap(bestcpt, xyz)
-    p1, p2 = partition(bestmap, bestdir)
+    bestmap, _  = _conmap(bestcpt, xyz)
+    p1, p2 = _partition(bestmap, bestdir)
   end
 
   p = ones(Int, n)
@@ -320,10 +322,10 @@ end
 
 
 """
-    partition(X, direction)
+    _partition(X, direction)
 
 Splits a set of points into two parts by projecting them onto a given direction vector
-and partitioning at the median projection value.
+and _partitioning at the median projection value.
 
 # Arguments
 - `X::Matrix{Float64}`: An `n × d` matrix of points (each row is a point in ℝ^d or ℝ^{d+1}).
@@ -334,10 +336,10 @@ and partitioning at the median projection value.
 - `part2::Vector{Int}`: Indices of points with projection > median (the other side).
 
 # Notes
-- This ensures a balanced partition by cutting at the median of the projected values.
+- This ensures a balanced _partition by cutting at the median of the projected values.
 - Commonly used to implement great-circle or hyperplane separators.
 """
-function partition(X::Matrix{Float64}, direction::Vector{Float64})
+function _partition(X::Matrix{Float64}, direction::Vector{Float64})
     proj = X * direction
     threshold = median(proj)
     part1 = findall(proj .<= threshold)

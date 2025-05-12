@@ -7,14 +7,14 @@ const traversal_counter = Ref(1);
 
 A node in a 2D kd-tree data structure, representing a spatial region and its recursive subdivision.
 
-Each node contains bounding box coordinates, optional splitting information, and links to child nodes. The node can also store associated data points and optional entry/exit traversal symbols for space-filling curve traversal.
+Each node contains bounding box coordinates, optional _splitting information, and links to child nodes. The node can also store associated data points and optional entry/exit traversal symbols for space-filling curve traversal.
 
 # Fields
 - `bbox::Tuple{Tuple{Float64, Float64}, Tuple{Float64, Float64}}`: Bounding box as `(min_coords, max_coords)`.
-- `splitdim::Union{Int, Nothing}`: Splitting dimension (1 for x-axis, 2 for y-axis), or `nothing` for leaf.
-- `splitval::Union{Float64, Nothing}`: Coordinate value of the splitting plane, or `nothing` for leaf.
-- `left::Union{KdNode, Nothing}`: Left child node (subtree with coordinates ≤ `splitval`), or `nothing`.
-- `right::Union{KdNode, Nothing}`: Right child node (subtree with coordinates > `splitval`), or `nothing`.
+- `_splitdim::Union{Int, Nothing}`: _splitting dimension (1 for x-axis, 2 for y-axis), or `nothing` for leaf.
+- `_splitval::Union{Float64, Nothing}`: Coordinate value of the _splitting plane, or `nothing` for leaf.
+- `left::Union{KdNode, Nothing}`: Left child node (subtree with coordinates ≤ `_splitval`), or `nothing`.
+- `right::Union{KdNode, Nothing}`: Right child node (subtree with coordinates > `_splitval`), or `nothing`.
 - `is_leaf::Bool`: Whether the node is a leaf.
 - `is_root::Bool`: Whether the node is the root of the tree.
 - `data::Matrix{Float64}`: Data points contained in this node.
@@ -23,8 +23,8 @@ Each node contains bounding box coordinates, optional splitting information, and
 """
 mutable struct KdNode
     bbox::Tuple{Tuple{Float64, Float64}, Tuple{Float64, Float64}}  # (min_coords, max_coords)
-    splitdim::Union{Int, Nothing}
-    splitval::Union{Float64, Nothing}
+    _splitdim::Union{Int, Nothing}
+    _splitval::Union{Float64, Nothing}
     left::Union{KdNode, Nothing}
     right::Union{KdNode, Nothing}
     is_leaf::Bool
@@ -67,25 +67,25 @@ function part_adaptive_sfc(A::SparseMatrixCSC, coords::Matrix, k::Int=2)
     coords_with_idx = hcat(coords, collect(1:n)); # Assuming that nodes ids are {1, 2, ..., n}
 
     # Build the kd-Tree
-    tree = build_tree(coords_with_idx);
+    tree = _build_tree(coords_with_idx);
 
     # Start traversal of the tree
     traversal_counter[] = 1;
-    traversal_data = traverse_kd(tree, :L, :R);
+    traversal_data = _traverse_kd(tree, :L, :R);
 
     # Extract x, y coordinates and traversal order from each leaf’s data
     xs = [leaf_data[1] for leaf_data in traversal_data];
     ys = [leaf_data[2] for leaf_data in traversal_data];
     sfc_order = Int.([leaf_data[3] for leaf_data in traversal_data]);
 
-    part = get_partition(sfc_order, k);
+    part = _get_partition(sfc_order, k);
 
     return part;
 end
 
 
 """
-    bounding_box(coords::Matrix{Float64})
+    _bounding_box(coords::Matrix{Float64})
 
 Compute the axis-aligned bounding box for a set of 2D points.
 
@@ -97,10 +97,10 @@ Compute the axis-aligned bounding box for a set of 2D points.
 
 # Example
 ```julia-repl
-julia> bounding_box([1.0 2.0; 3.0 4.0; -1.0 5.0])
+julia> _bounding_box([1.0 2.0; 3.0 4.0; -1.0 5.0])
 ((-1.0, 2.0), (3.0, 5.0))
 """
-function bounding_box(coords::Matrix{Float64})
+function _bounding_box(coords::Matrix{Float64})
     xmin = minimum(coords[:, 1])
     ymin = minimum(coords[:, 2])
     xmax = maximum(coords[:, 1])
@@ -110,38 +110,38 @@ end
 
 
 """
-    split(coords::Matrix{Float64}, dim::Int)
+    _split(coords::Matrix{Float64}, dim::Int)
 
-Split a set of 2D points along a specified dimension at the median.
+_split a set of 2D points along a specified dimension at the median.
 
 # Arguments
 - `coords::Matrix{Float64}`: A matrix of size `n × 2`, where each row is a 2D point `(x, y)`.
-- `dim::Int`: Splitting dimension (`1` for x-axis, `2` for y-axis).
+- `dim::Int`: _splitting dimension (`1` for x-axis, `2` for y-axis).
 
 # Returns
-- `left::Matrix{Float64}`: Points in the left subset (≤ split value).
-- `right::Matrix{Float64}`: Points in the right subset (> split value).
-- `splitval::Float64`: The coordinate value at which the split occurs.
+- `left::Matrix{Float64}`: Points in the left subset (≤ _split value).
+- `right::Matrix{Float64}`: Points in the right subset (> _split value).
+- `_splitval::Float64`: The coordinate value at which the _split occurs.
 
 # Example
 ```julia-repl
-julia> left, right, splitval = split([1.0 2.0; 3.0 4.0; 0.0 5.0], 1)
+julia> left, right, _splitval = _split([1.0 2.0; 3.0 4.0; 0.0 5.0], 1)
 ([0.0 5.0; 1.0 2.0], [3.0 4.0], 1.0)
 """
-function split(coords::Matrix{Float64}, dim::Int)
+function _split(coords::Matrix{Float64}, dim::Int)
     perm = sortperm(coords[:, dim])
     sorted = coords[perm, :]
     n = size(coords, 1)
     m = div(n, 2)
-    splitval = sorted[m, dim]
+    _splitval = sorted[m, dim]
     left = sorted[1:m, :]
     right = sorted[m+1:end, :]
-    return left, right, splitval
+    return left, right, _splitval
 end
 
 
 """
-    build_tree(coords::Matrix{Float64}, is_root::Bool=true)
+    _build_tree(coords::Matrix{Float64}, is_root::Bool=true)
 
 Recursively build a 2D kd-tree from a set of points. Leaf nodes contain the data points inside their region.
 
@@ -154,30 +154,30 @@ Recursively build a 2D kd-tree from a set of points. Leaf nodes contain the data
 
 # Example
 ```julia-repl
-julia> tree = build_tree([1.0 2.0; 3.0 4.0; 0.0 5.0])
+julia> tree = _build_tree([1.0 2.0; 3.0 4.0; 0.0 5.0])
 KdNode(...)
 """
-function build_tree(coords::Matrix{Float64}, is_root::Bool=true)
+function _build_tree(coords::Matrix{Float64}, is_root::Bool=true)
     n = size(coords, 1)
     if n <= 1
-        bbox = bounding_box(coords)
+        bbox = _bounding_box(coords)
         return KdNode(bbox, nothing, nothing, nothing, nothing, true, is_root, coords, nothing, nothing)
     end
 
-    bbox = bounding_box(coords) 
+    bbox = _bounding_box(coords) 
     spans = bbox[2] .- bbox[1] 
-    splitdim = argmax(spans) 
-    left_coords, right_coords, splitval = split(coords, splitdim)
+    _splitdim = argmax(spans) 
+    left_coords, right_coords, _splitval = _split(coords, _splitdim)
     
-    left_node = build_tree(left_coords, false)
-    right_node = build_tree(right_coords, false)
+    left_node = _build_tree(left_coords, false)
+    right_node = _build_tree(right_coords, false)
 
-    return KdNode(bbox, splitdim, splitval, left_node, right_node, false, is_root, zeros(0,3), nothing, nothing)
+    return KdNode(bbox, _splitdim, _splitval, left_node, right_node, false, is_root, zeros(0,3), nothing, nothing)
 end
 
 
 """
-    traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any}=[])
+    _traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any}=[])
 
 Traverse a kd-tree following an adaptive space-filling curve and collect leaf data.
 
@@ -198,10 +198,10 @@ At each leaf node, it collects the stored data into an accumulator.
 
 # Example
 ```julia-repl
-julia> data = traverse_kd(tree)
+julia> data = _traverse_kd(tree)
 [[x1, y1, id1], [x2, y2, id2], ...]
 """
-function traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any} = [])
+function _traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any} = [])
     node.entry = entry
     node.exit = exit
 
@@ -219,27 +219,27 @@ function traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits
     # Use the node center as entry point if no previous exits.
     # Otherwise reuse the last exit point
     if isempty(last_exits)
-        entry_pt = bbox_center(node.bbox)
+        entry_pt = _bbox_center(node.bbox)
     else
         entry_pt = last(last_exits)
     end
 
     # Determine the order of child traversal
-    order = step(node.entry, node.exit, node.splitdim, entry_pt, node.splitval)
+    order = _step(node.entry, node.exit, node._splitdim, entry_pt, node._splitval)
 
     # Traverse the first (defined as left) child: 
     # determine its entry/exit directions, recurse, and store its exit point.
-    child_l = get_child(node, first(order))
-    child_l_entry, child_l_exit = get_child_entry_exit(node.entry, node.exit, node.splitdim, first(order))
-    last_exit = traverse_kd(child_l, child_l_entry, child_l_exit, last_exits, acc)
+    child_l = _get_child(node, first(order))
+    child_l_entry, child_l_exit = _get_child_entry_exit(node.entry, node.exit, node._splitdim, first(order))
+    last_exit = _traverse_kd(child_l, child_l_entry, child_l_exit, last_exits, acc)
     if !isnothing(last_exit) 
         push!(last_exits, last_exit)
     end
     # Then traverse the second (defined as right) child: 
     # infer its entry as opposite of first child's exit, recurse, and store its exit point.
-    child_r = get_child(node, last(order))
-    child_r_entry, child_r_exit = (opposite_dir(child_l_exit), node.exit)
-    last_exit = traverse_kd(child_r, child_r_entry, child_r_exit, last_exits, acc)
+    child_r = _get_child(node, last(order))
+    child_r_entry, child_r_exit = (_opposite_dir(child_l_exit), node.exit)
+    last_exit = _traverse_kd(child_r, child_r_entry, child_r_exit, last_exits, acc)
     if !isnothing(last_exit) 
         push!(last_exits, last_exit)
     end
@@ -252,7 +252,7 @@ end
 
 
 """
-    bbox_center(bbox)
+    _bbox_center(bbox)
 
 Compute the center point of a bounding box.
 
@@ -264,49 +264,49 @@ Compute the center point of a bounding box.
 
 # Example
 ```julia-repl
-julia> bbox_center(((0.0, 0.0), (2.0, 4.0)))
+julia> _bbox_center(((0.0, 0.0), (2.0, 4.0)))
 (1.0, 2.0)
 """
-function bbox_center(bbox)
+function _bbox_center(bbox)
     (xmin, ymin), (xmax, ymax) = bbox
     return ((xmin + xmax) / 2, (ymin + ymax) / 2)
 end
 
 
 """
-    step(entry::Symbol, exit::Symbol, splitdim::Int, entry_pt::Tuple{Float64, Float64}, splitval::Float64)
+    _step(entry::Symbol, exit::Symbol, _splitdim::Int, entry_pt::Tuple{Float64, Float64}, _splitval::Float64)
 
 Determine the traversal order of child nodes in a kd-tree based on entry and exit directions.
 
 # Arguments
 - `entry::Symbol`: Entry direction (`:L`, `:R`, `:T`, or `:B`).
 - `exit::Symbol`: Exit direction (`:L`, `:R`, `:T`, or `:B`).
-- `splitdim::Int`: Splitting dimension (`1` for x-axis, `2` for y-axis).
+- `_splitdim::Int`: _splitting dimension (`1` for x-axis, `2` for y-axis).
 - `entry_pt::Tuple{Float64, Float64}`: Coordinates of the entry point.
-- `splitval::Float64`: Value of the splitting plane along `splitdim`.
+- `_splitval::Float64`: Value of the _splitting plane along `_splitdim`.
 
 # Returns
 - A vector of symbols indicating the traversal order of child nodes (e.g., `[:left, :right]`).
 
 # Example
 ```julia-repl
-julia> step(:L, :R, 1, (0.0, 0.5), 0.3)
+julia> _step(:L, :R, 1, (0.0, 0.5), 0.3)
 [:left, :right]
 """
-function step(entry::Symbol, exit::Symbol, splitdim::Int, entry_pt::Tuple{Float64, Float64}, splitval::Float64)
-    type = order_type(entry, exit)
-    align = get_alignment(entry, splitdim)
+function _step(entry::Symbol, exit::Symbol, _splitdim::Int, entry_pt::Tuple{Float64, Float64}, _splitval::Float64)
+    type = _order_type(entry, exit)
+    align = _get_alignment(entry, _splitdim)
 
-    # Resolve child order based on entry point and split
+    # Resolve child order based on entry point and _split
     if type == :cis
         if align == :parallel
-            if splitdim == 1
+            if _splitdim == 1
                 return entry == :L ? [:left, :right] : [:right, :left]
             else
                 return entry == :T ? [:top, :bottom] : [:bottom, :top]
             end
         else # :cis + :perpendicular
-            if splitdim == 1
+            if _splitdim == 1
                 return exit == :L ? [:right, :left] : [:left, :right]
                 
             else
@@ -315,16 +315,16 @@ function step(entry::Symbol, exit::Symbol, splitdim::Int, entry_pt::Tuple{Float6
         end
     else  # :tran
         if align == :parallel
-            if splitdim == 1 
+            if _splitdim == 1 
                 return entry == :L ? [:left, :right] : [:right, :left]
             else 
                 return entry == :T ? [:top, :bottom] : [:bottom, :top]
             end
         else # :tran + :perpendicular
-            if splitdim == 1
-                return entry_pt[splitdim] ≤ splitval ? [:left, :right] : [:right, :left]
+            if _splitdim == 1
+                return entry_pt[_splitdim] ≤ _splitval ? [:left, :right] : [:right, :left]
             else
-                return entry_pt[splitdim] ≤ splitval ? [:bottom, :top] : [:top, :bottom]
+                return entry_pt[_splitdim] ≤ _splitval ? [:bottom, :top] : [:top, :bottom]
             end
         end
     end
@@ -332,11 +332,11 @@ end
 
 
 """
-    get_child(node::KdNode, side::Symbol)
+    _get_child(node::KdNode, side::Symbol)
 
 Return the child node of a `KdNode` corresponding to the specified side.
 
-This function retrieves either the left or right child node depending on the side and the splitting dimension.
+This function retrieves either the left or right child node depending on the side and the _splitting dimension.
 
 # Arguments
 - `node::KdNode`: The kd-tree node.
@@ -347,33 +347,33 @@ This function retrieves either the left or right child node depending on the sid
 
 # Example
 ```julia-repl
-julia> get_child(node, :left)
+julia> _get_child(node, :left)
 KdNode(...)
 """
-function get_child(node::KdNode, side::Symbol)
-    if node.splitdim == 1
+function _get_child(node::KdNode, side::Symbol)
+    if node._splitdim == 1
         return side == :left ? node.left : node.right
-    elseif node.splitdim == 2
+    elseif node._splitdim == 2
         return side == :bottom ? node.left : node.right
     else
-        error("Invalid splitdim")
+        error("Invalid _splitdim")
     end
 end
 
 
 """
-    get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, splitdim::Int, side::Symbol)
+    _get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, _splitdim::Int, side::Symbol)
 
 Compute the entry and exit directions for a child node in a kd-tree traversal.
 
-Given the parent node’s entry and exit directions, the splitting dimension, and the side being traversed,
+Given the parent node’s entry and exit directions, the _splitting dimension, and the side being traversed,
 this function determines the entry and exit directions for the child node according to space-filling
 curve traversal rules (using `:cis` and `:tran` order types and `:parallel` / `:perpendicular` alignment).
 
 # Arguments
 - `parent_entry::Symbol`: Entry direction at the parent node (`:L`, `:R`, `:T`, `:B`).
 - `parent_exit::Symbol`: Exit direction at the parent node (`:L`, `:R`, `:T`, `:B`).
-- `splitdim::Int`: Splitting dimension (`1` for x-axis, `2` for y-axis).
+- `_splitdim::Int`: _splitting dimension (`1` for x-axis, `2` for y-axis).
 - `side::Symbol`: Side of the child being traversed (`:left`, `:right`, `:top`, `:bottom`).
 
 # Returns
@@ -381,17 +381,17 @@ curve traversal rules (using `:cis` and `:tran` order types and `:parallel` / `:
 
 # Example
 ```julia-repl
-julia> get_child_entry_exit(:L, :R, 1, :left)
+julia> _get_child_entry_exit(:L, :R, 1, :left)
 (:L, :R)
 """
-function get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, splitdim::Int, side::Symbol)
-    type = order_type(parent_entry, parent_exit)
-    align = get_alignment(parent_entry, splitdim)
+function _get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, _splitdim::Int, side::Symbol)
+    type = _order_type(parent_entry, parent_exit)
+    align = _get_alignment(parent_entry, _splitdim)
 
     if type == :tran && align == :parallel
         return (parent_entry, parent_exit)
     elseif  type == :tran && align == :perpendicular
-        if splitdim == 1
+        if _splitdim == 1
             if parent_entry == :T
                 if side == :left
                     return (:T, :R)
@@ -422,7 +422,7 @@ function get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, splitdi
 
         end
     elseif type == :cis && align == :parallel
-        if splitdim == 1
+        if _splitdim == 1
             if side == :left
                 if parent_entry == :L
                     return (:L, :R)
@@ -452,7 +452,7 @@ function get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, splitdi
             end
         end
     elseif type == :cis && align == :perpendicular
-        if splitdim == 1
+        if _splitdim == 1
             if side == :left
                 if parent_entry == :T
                     return (:T, :R)
@@ -486,7 +486,7 @@ end
 
 
 """
-    order_type(entry::Symbol, exit::Symbol)
+    _order_type(entry::Symbol, exit::Symbol)
 
 Determine the traversal type based on entry and exit directions.
 
@@ -500,12 +500,12 @@ Determine the traversal type based on entry and exit directions.
 
 # Example
 ```julia-repl
-julia> order_type(:L, :R)
+julia> _order_type(:L, :R)
 :tran
-julia> order_type(:T, :R)
+julia> _order_type(:T, :R)
 :cis
 """
-function order_type(entry::Symbol, exit::Symbol)
+function _order_type(entry::Symbol, exit::Symbol)
     if (entry == :L && exit == :R) || (entry == :R && exit == :L) ||
         (entry == :T && exit == :B) || (entry == :B && exit == :T)
          return :tran
@@ -516,28 +516,28 @@ end
 
 
 """
-    get_alignment(entry::Symbol, splitdim::Int)
+    _get_alignment(entry::Symbol, _splitdim::Int)
 
-Determine the alignment of an entry direction relative to the splitting dimension.
+Determine the alignment of an entry direction relative to the _splitting dimension.
 
 # Arguments
 - `entry::Symbol`: Entry direction (`:L`, `:R`, `:T`, or `:B`).
-- `splitdim::Int`: Splitting dimension (`1` for x-axis, `2` for y-axis).
+- `_splitdim::Int`: _splitting dimension (`1` for x-axis, `2` for y-axis).
 
 # Returns
-- `:parallel` if entry edge direction is parallel to the splitting dimension.
+- `:parallel` if entry edge direction is parallel to the _splitting dimension.
 - `:perpendicular` otherwise.
 
 # Example
 ```julia-repl
-julia> get_alignment(:L, 1)
+julia> _get_alignment(:L, 1)
 :parallel
-julia> get_alignment(:T, 1)
+julia> _get_alignment(:T, 1)
 :perpendicular
 """
-function get_alignment(entry::Symbol, splitdim::Int)
-    if (splitdim == 1 && (entry == :L || entry == :R)) ||
-       (splitdim == 2 && (entry == :T || entry == :B))
+function _get_alignment(entry::Symbol, _splitdim::Int)
+    if (_splitdim == 1 && (entry == :L || entry == :R)) ||
+       (_splitdim == 2 && (entry == :T || entry == :B))
         return :parallel
     else
         return :perpendicular
@@ -546,7 +546,7 @@ end
 
 
 """
-    opposite_dir(dir::Symbol)::Symbol
+    _opposite_dir(dir::Symbol)::Symbol
 
 Return the opposite direction symbol.
 
@@ -558,12 +558,12 @@ Return the opposite direction symbol.
 
 # Example
 ```julia-repl
-julia> opposite_dir(:L)
+julia> _opposite_dir(:L)
 :R
-julia> opposite_dir(:T)
+julia> _opposite_dir(:T)
 :B
 """
-function opposite_dir(dir::Symbol)::Symbol
+function _opposite_dir(dir::Symbol)::Symbol
     if dir == :T
         return :B
     elseif dir == :B
@@ -579,7 +579,7 @@ end
 
 
 """
-    get_partition(v::AbstractVector, k::Int)
+    _get_partition(v::AbstractVector, k::Int)
 
 Create a partition indicator vector by dividing indices into `k` contiguous groups.
 
@@ -596,10 +596,10 @@ be a node ID (1-based indexing), and the result maps each node ID to its partiti
 
 # Example
 ```julia-repl
-julia> get_partition([1, 2, 3, 4, 5, 6], 2)
+julia> _get_partition([1, 2, 3, 4, 5, 6], 2)
 [1, 1, 1, 2, 2, 2]
 """
-function get_partition(v::AbstractVector, k::Int)
+function _get_partition(v::AbstractVector, k::Int)
     n = length(v)
     part = zeros(Int, maximum(v))  # assuming v contains node IDs (1-based)
 
