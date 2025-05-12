@@ -48,7 +48,7 @@ using Test
     end
 
     @testset "Testing Adaptive Space-filling Curve Partitioning" begin
-        res = GraphLab. part_adaptive_sfc(A, coords)
+        res = GraphLab.part_adaptive_sfc(A, coords)
         @test length(res) == size(A, 1)
         @test all(x -> !isnan(x), res)
     end
@@ -76,6 +76,6 @@ using Test
         res = GraphLab.nested_dissection(A, part_coordinate; coords=coords)
         @test length(res) == size(A, 1)
         @test all(x -> !isnan(x), res) 
-        @test all(res .>= 1) && all(rest .<= size(A, 1))
+        @test all(res .>= 1) && all(res .<= size(A, 1))
     end
 end

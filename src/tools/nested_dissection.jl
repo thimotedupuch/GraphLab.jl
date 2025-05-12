@@ -27,7 +27,7 @@ wait_for_key(prompt) = (print(stdout, prompt); read(stdin, 1); nothing)
 
 
 """
-    get_maximum_matching(g::Graph)
+    _get_maximum_matching(g::Graph)
 
 Computes a maximum weight matching of the graph `g` using a silent CBC solver.
 
@@ -40,7 +40,7 @@ Computes a maximum weight matching of the graph `g` using a silent CBC solver.
 # Notes
 - Assumes unit weights unless otherwise specified.
 """
-function get_maximum_matching(g::Graph)
+function _get_maximum_matching(g::Graph)
   match = maximum_weight_matching(g, optimizer_with_attributes(Cbc.Optimizer, "LogLevel" => 0, MOI.Silent() => true));
   # match.weight ≈ 1
 
@@ -214,7 +214,7 @@ function _nested_dissection(A::SparseMatrixCSC, method::Function; coords::Union{
         end
 
         # Compute maximum matching
-        match =  get_maximum_matching(gborder)
+        match =  _get_maximum_matching(gborder)
 
         sep,_,_ = _vtxsep(gborder, p1border, p2border, match);
 

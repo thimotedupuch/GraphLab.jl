@@ -1,4 +1,14 @@
 # M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
+
+# using CairoMakie
+# using Colors
+
+
+## Note:
+# This code is adapted from https://github.com/fcdimitr/SGtSNEpi.jl/blob/master/src/vis.jl
+# Here, we augment it for our specific purposes.
+# As required by the authors of the original paper, please cite:
+# }
 """
     _vis_graph(A::SparseMatrixCSC, coords::Matrix, p::Vector{Int})
 
@@ -12,18 +22,12 @@ Visualize the partitioning `p` of graph `A` using node coordinates `coords`.
 # Output
 - Displays the partitioned graph visualization.
 """
-
-using CairoMakie
-using Colors
-
-## Note:
-# This code is adapted from https://github.com/fcdimitr/SGtSNEpi.jl/blob/master/src/vis.jl
-# Here, we augment it for our specific purposes.
-# As required by the authors of the original paper, please cite:
-# }
 function _vis_graph(A::SparseMatrixCSC,
                     coords::Matrix,
                     p::Vector{Int})
+
+    @eval using CairoMakie
+    @eval using Colors
 
     cmap = distinguishable_colors(
       maximum(p) - minimum(p) + 1, # Adjust colormap to the range of labels
@@ -118,6 +122,8 @@ Draw and optionally save a visualization of the partitioned graph `A`.
 - Saves the figure if `file_name` is specified.
 """
 function draw_graph(A::SparseMatrixCSC, coords::Matrix, p::Vector{Int};file_name::Union{String, Nothing}=nothing)
+    @eval using CairoMakie
+
     CairoMakie.activate!()
     fig = _vis_graph(A, coords, p)
 
@@ -168,6 +174,8 @@ Generates a visual sparsity plot of the sparse matrix `A`.
 """
 
 function spy_mat(A::SparseMatrixCSC)
+    @eval using CairoMakie
+
     f = Figure(resolution = (1000, 1000), backgroundcolor = :transparent)
 
     ax1 = Axis(f[1, 1],
