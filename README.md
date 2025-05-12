@@ -1,7 +1,5 @@
 [![CI](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml)
 [![Documentation](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/docs.yml/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev)
-[![Stable](https://lechekhabm.github.io/GraphLab.jl/stable/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev)
-[![Dev](https://lechekhabm.github.io/GraphLab.jl/dev/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev/dev_api/)
 [![License](https://img.shields.io/github/license/lechekhabm/GraphLab.jl)](https://github.com/lechekhabm/GraphLab.jl/blob/main/LICENSE)
 
 
