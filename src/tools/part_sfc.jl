@@ -95,7 +95,7 @@ favor rows (X axis) if `maj_axis == 1`, or columns (Y axis) if `maj_axis == 2`.
 - A `Vector{CartesianIndex{2}}` representing the traversal path.
 
 ### Example
-```julia
+```julia-repl
 julia> order = _gilbert_indices((4, 5))
 julia> println(order)
 [CartesianIndex(1, 1), CartesianIndex(2, 1), CartesianIndex(2, 2), ...]
@@ -173,7 +173,7 @@ Return a list of `CartesianIndex{2}` grid coordinates ordered by 2D Morton (Z-or
 - A vector of `CartesianIndex{2}` objects representing the traversal order.
 
 ### Example
-```julia
+```julia-repl
 julia> order = _morton_indices((4, 4))
 julia> println(order)
 [CartesianIndex(1, 1), CartesianIndex(1, 2), CartesianIndex(2, 1), CartesianIndex(2, 2), ...]
