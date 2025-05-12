@@ -7,6 +7,13 @@ using Colors
 # This code is adapted from https://github.com/fcdimitr/SGtSNEpi.jl/blob/master/src/vis.jl
 # Here, we augment it for our specific purposes.
 # As required by the authors of the original paper, please cite:
+# @inproceedings{pitsianis2019sgtsnepi,
+#     author = {Pitsianis, Nikos and Iliopoulos, Alexandros-Stavros and Floros, Dimitris and Sun, Xiaobai},
+#     doi = {10.1109/HPEC.2019.8916505},
+#     booktitle = {IEEE High Performance Extreme Computing Conference},
+#     month = {11},
+#     title = {{Spaceland Embedding of Sparse Stochastic Graphs}},
+#     year = {2019}
 # }
 """
     _vis_graph(A::SparseMatrixCSC, coords::Matrix, p::Vector{Int})
