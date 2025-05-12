@@ -10,7 +10,7 @@
 It provides a growing set of accessible methods, including coordinate, inertial, spectral, and space-filling curve partitioning, alongside recursive partitioning and nested dissection.
 
 <p align="center">
-  <img src="docs/assets/logo.png" alt="GraphLab.jl logo" width="300"/>
+  <img src="https://lechekhabm.github.io/GraphLab.jl/dev/assets/logo.png" alt="GraphLab.jl logo" width="300"/>
 </p>
 
 The package includes utilities for:
