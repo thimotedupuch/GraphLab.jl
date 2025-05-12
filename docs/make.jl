@@ -7,8 +7,9 @@ makedocs(
     sitename = "GraphLab.jl",
     modules  = [GraphLab],
     format   = Documenter.HTML(
-        # prettyurls = false,  # Ensure local testing works
-        collapselevel = 1    # Controls sidebar depth (1 = show subsections)
+        repolink = "https://github.com/lechekhabm/GraphLab.jl",
+        collapselevel = 1,
+        prettyurls = true,
     ),
     repo     = "https://github.com/lechekhabm/GraphLab.jl",
     pages    = [
