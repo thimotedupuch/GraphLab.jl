@@ -8,7 +8,7 @@
 <p align="center">
   <img src="https://lechekhabm.github.io/GraphLab.jl/dev/assets/logo.png" alt="GraphLab.jl logo" width="150"/>
 </p>
-<!-- This is the code repository for ``GraphLab.jl``, a toolbox for graph partitioning algorithms in Julia. It provides a framework to compare, benchmark, and analyze various graph partitioning techniques. The framework supports both non-recursive and recursive methods with geometric information, like coordinate and inertial bisection, as well as methods without geometric information, such as spectral bisection. It makes it easy to evaluate and compare the outputs of different methods, helping users understand their trade-offs and applications. -->
+
 ``GraphLab.jl`` is a Julia package for exploring, experimenting, and learning graph partitioning algorithms.
 It provides a growing set of accessible methods, including coordinate, inertial, spectral, and space-filling curve partitioning, alongside recursive partitioning and nested dissection.
 
@@ -19,7 +19,7 @@ The package includes utilities for:
 * Benchmarking and comparing with external partitioners.
 ``GraphLab.jl`` aims to support the educational and exploratory needs of learners, researchers, and the Julia graph community.
 
-Feel free to contribute or report issues on the GitHub repository for **GraphLab.jl**. Happy partitioning!
+Feel free to contribute or report issues on the GitHub repository for ``GraphLab.jl``. Happy partitioning!
 
 ## Getting Started
 
