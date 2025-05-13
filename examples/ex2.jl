@@ -2,7 +2,7 @@ using Pkg
 Pkg.activate(@__DIR__)
 
 using SparseArrays,DelimitedFiles, MAT, Plots, PrettyTables
-using GraphPartitioning
+using GraphLab
 
 """
     benchmark(A::SparseMatrixCSC{Float64, Int64}, coords::Matrix{Int64}, k::Int64, prefix::String)
@@ -31,36 +31,36 @@ function benchmark( A::SparseMatrixCSC,
 
 
     # Partition methods
-    p_coord    = GraphPartitioning.recursive_bisection(GraphPartitioning.part_coordinate,k,A, coords)
-    p_inertial = GraphPartitioning.recursive_bisection(GraphPartitioning.part_inertial,  k,A,coords)
-    p_spectral = GraphPartitioning.recursive_bisection(GraphPartitioning.part_spectral,  k,A)
+    p_coord    = GraphLab.recursive_bisection(GraphLab.part_coordinate,k,A, coords)
+    p_inertial = GraphLab.recursive_bisection(GraphLab.part_inertial,  k,A,coords)
+    p_spectral = GraphLab.recursive_bisection(GraphLab.part_spectral,  k,A)
 
-    p_metis_rec     = GraphPartitioning.part_metis(A, k, :RECURSIVE)
-    p_metis_kway    = GraphPartitioning.part_metis(A, k, :KWAY)
+    p_metis_rec     = GraphLab.part_metis(A, k, :RECURSIVE)
+    p_metis_kway    = GraphLab.part_metis(A, k, :KWAY)
 
     # Save visualizations
-    GraphPartitioning.draw_graph(A, coords, p_coord, file_name=prefix * "_coordinate.png")
-    GraphPartitioning.draw_graph(A, coords, p_inertial, file_name=prefix * "_inertial.png")
-    GraphPartitioning.draw_graph(A, coords, p_spectral, file_name=prefix * "_spectral.png")
-    GraphPartitioning.draw_graph(A, coords, p_metis_rec, file_name=prefix * "_metis_rec.png")
-    GraphPartitioning.draw_graph(A, coords, p_metis_kway, file_name=prefix * "_metis_kway.png")
+    GraphLab.draw_graph(A, coords, p_coord, file_name=prefix * "_coordinate.png")
+    GraphLab.draw_graph(A, coords, p_inertial, file_name=prefix * "_inertial.png")
+    GraphLab.draw_graph(A, coords, p_spectral, file_name=prefix * "_spectral.png")
+    GraphLab.draw_graph(A, coords, p_metis_rec, file_name=prefix * "_metis_rec.png")
+    GraphLab.draw_graph(A, coords, p_metis_kway, file_name=prefix * "_metis_kway.png")
 
         # Compute edge cuts
     edge_cuts = [
-        GraphPartitioning.count_edge_cut(A, p_coord),
-        GraphPartitioning.count_edge_cut(A, p_inertial),
-        GraphPartitioning.count_edge_cut(A, p_spectral),
-        GraphPartitioning.count_edge_cut(A, p_metis_rec),
-        GraphPartitioning.count_edge_cut(A, p_metis_kway)
+        GraphLab.count_edge_cut(A, p_coord),
+        GraphLab.count_edge_cut(A, p_inertial),
+        GraphLab.count_edge_cut(A, p_spectral),
+        GraphLab.count_edge_cut(A, p_metis_rec),
+        GraphLab.count_edge_cut(A, p_metis_kway)
     ]
 
     # Compute balance ratios
     balances = [
-        GraphPartitioning.compute_partition_balance(p_coord),
-        GraphPartitioning.compute_partition_balance(p_inertial),
-        GraphPartitioning.compute_partition_balance(p_spectral),
-        GraphPartitioning.compute_partition_balance(p_metis_rec),
-        GraphPartitioning.compute_partition_balance(p_metis_kway)
+        GraphLab.compute_partition_balance(p_coord),
+        GraphLab.compute_partition_balance(p_inertial),
+        GraphLab.compute_partition_balance(p_spectral),
+        GraphLab.compute_partition_balance(p_metis_rec),
+        GraphLab.compute_partition_balance(p_metis_kway)
     ]
 
     return edge_cuts, balances
