@@ -17,7 +17,7 @@ The package includes utilities for:
 * Measuring partition quality.
 * Visualizing partitioned graphs.
 * Benchmarking and comparing with external partitioners.
-`GraphLab.jl` aims to support the educational and exploratory needs of learners, researchers, and the Julia graph community.
+``GraphLab.jl`` aims to support the educational and exploratory needs of learners, researchers, and the Julia graph community.
 
 Feel free to contribute or report issues on the GitHub repository for **GraphLab.jl**. Happy partitioning!
 
