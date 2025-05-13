@@ -1,9 +1,9 @@
+# GraphLab.jl
 [![CI](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/ci.yml)
 [![Documentation](https://github.com/lechekhabm/GraphLab.jl/actions/workflows/docs.yml/badge.svg)](https://lechekhabm.github.io/GraphLab.jl/dev)
 [![License](https://img.shields.io/github/license/lechekhabm/GraphLab.jl)](https://github.com/lechekhabm/GraphLab.jl/blob/main/LICENSE)
 
-
-# GraphLab.jl
+## Overview
 
 <p align="center">
   <img src="https://lechekhabm.github.io/GraphLab.jl/dev/assets/logo.png" alt="GraphLab.jl logo" width="150"/>
