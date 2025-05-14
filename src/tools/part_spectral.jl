@@ -43,7 +43,7 @@ function part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
     # v0 = ones(n)
     local_rng = MersenneTwister(1234)
     v0 = randn(local_rng, n)
-    eig_vals, eig_vecs = Arpack.eigs(L; which=:SR, nev=2, v0=v0)
+    eig_vals, eig_vecs = Arpack.eigs(L; which=:SR, nev=2, v0=v0, ncv = 300)
 
     ev2 = eig_vecs[:, sortperm(eig_vals)[2]]
     # ev3 = eig_vecs[:, sortperm(eig_vals)[3]]
