@@ -124,7 +124,7 @@ The script evaluates these methods on a series of different graphs, providing in
 2. Run the example script in the Julia or directly from the terminal:
 
    ```bash
-   julia ex1.jl
+   julia --project="." ex1.jl
    ```
 
 ### Example 2: Recursive Bisection
@@ -176,7 +176,7 @@ This example demonstrates recursive bisection using different methods, including
 2. Run the example script in the Julia or directly from the terminal:
 
    ```bash
-   julia ex2.jl
+   julia --project="." ex2.jl
    ```
 
 ## Citation
