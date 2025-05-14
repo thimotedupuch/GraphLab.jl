@@ -45,7 +45,7 @@ To install the package from GitHub and add it to your working environment, follo
    GraphLab.draw_graph(A, coords, p, file_name="test.png")
    ```
    
-  For further details on the package and its functions, see [Paper](www.google.com).
+  For further details on the package and its functions, see [Documentation](https://lechekhabm.github.io/GraphLab.jl/dev/).
 
 ### Prerequisites and Dependencies
 
