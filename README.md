@@ -10,7 +10,15 @@
 </p>
 
 ``GraphLab.jl`` is a Julia package for exploring, experimenting, and learning graph partitioning algorithms.
-It provides a growing set of accessible methods, including **coordinate**, **inertial**, **spectral**, and **space-filling curve partitioning**, alongside **recursive partitioning** and **nested dissection**.
+It provides a growing set of accessible methods, including:
+1. [coordinate bisection](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.part_coordinate-Tuple%7BSparseArrays.SparseMatrixCSC,%20Matrix%7D)
+2. [inertial bisection](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.part_inertial-Tuple%7BSparseArrays.SparseMatrixCSC,%20Matrix%7D)
+3. [spectral bisection](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.part_spectral-Tuple%7BSparseArrays.SparseMatrixCSC%7D)
+4. [geometric special bisection](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.part_geospectral-Tuple%7BSparseArrays.SparseMatrixCSC%7D)
+5. [simple space-filling curve partitioning](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.part_adaptive_sfc)
+6. [adaptive space-filling curve partitioning](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.part_adaptive_sfc)
+7. [recursive partitioning](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.recursive_bisection)
+8. [nested dissection](https://lechekhabm.github.io/GraphLab.jl/dev/api/#GraphLab.nested_dissection-Tuple%7BSparseArrays.SparseMatrixCSC,%20Function%7D)
 
 The package includes utilities for:
 * Generating graphs and adjacency matrices.
@@ -49,7 +57,7 @@ To install the package from GitHub and add it to your working environment, follo
 
 ### Prerequisites and Dependencies
 
-The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, and **Statistics**.
+The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, **Statistics**. **AMD**, **GraphsMatching**, **JuMP**, and **Cbc**.
 
 For additional usability, you may need the following packages: **DelimitedFiles**, **MAT**, **Plots**, and **PrettyTables**.
 
