@@ -10,7 +10,7 @@
 </p>
 
 ``GraphLab.jl`` is a Julia package for exploring, experimenting, and learning graph partitioning algorithms.
-It provides a growing set of accessible methods, including coordinate, inertial, spectral, and space-filling curve partitioning, alongside recursive partitioning and nested dissection.
+It provides a growing set of accessible methods, including **coordinate**, **inertial**, **spectral**, and **space-filling curve partitioning**, alongside **recursive partitioning** and **nested dissection**.
 
 The package includes utilities for:
 * Generating graphs and adjacency matrices.
