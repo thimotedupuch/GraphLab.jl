@@ -178,6 +178,13 @@ This example demonstrates recursive bisection using different methods, including
    ```bash
    julia --project="." ex2.jl
    ```
+If the examples fails to run, try set up the environment in `examples`:
+```julia
+using Pkg
+Pkg.develop("..")
+Pkg.instantiate()
+Pkg.resolve()
+```
 
 ## Citation
 
