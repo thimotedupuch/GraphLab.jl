@@ -181,7 +181,7 @@ This example demonstrates recursive bisection using different methods, including
 If the examples fails to run, try set up the environment in `examples`:
 ```julia
 using Pkg
-Pkg.develop("..")
+Pkg.develop(path="..")
 Pkg.instantiate()
 Pkg.resolve()
 ```
