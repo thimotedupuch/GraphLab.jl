@@ -59,7 +59,7 @@ To install the package from GitHub and add it to your working environment, follo
 
 ### Prerequisites and Dependencies
 
-The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, **Statistics**. **AMD**, **GraphsMatching**, **JuMP**, and **Cbc**.
+The package will automatically install the following dependencies: **Arpack**, **CairoMakie**, **Colors**, **Graphs**, **LinearAlgebra**, **Metis**, **SparseArrays**, **Statistics**, **AMD**, **GraphsMatching**, **JuMP**, and **Cbc**.
 
 For additional usability, you may need the following packages: **DelimitedFiles**, **MAT**, **Plots**, and **PrettyTables**.
 
