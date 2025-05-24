@@ -252,7 +252,7 @@ function _sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
 
 
 """
-  part_randsphere(A, coords; ntrials)
+    part_randsphere(A, coords; ntrials)
 
 Geometric _partitioning using random spheres and lines.
 

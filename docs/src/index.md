@@ -37,7 +37,7 @@ To install the package from GitHub and add it to your working environment, follo
 3. Basic Example:
    ```julia
    using GraphLab
-   A, coords = GraphLab.build_adjacency("network")
+   A, coords = GraphLab.grid_graph(10, 50, π/3)
    p = GraphLab.part_spectral(A)
    GraphLab.draw_graph(A, coords, p, file_name="test.png")
    ```
