@@ -211,7 +211,7 @@ We will update the citation once the paper is published.
 
 ## Acknowledgments  
 - Jeroen Baert, Libmorton: C++ Morton Encoding/Decoding Library, 2018. [https://github.com/Forceflow/libmorton](https://github.com/Forceflow/libmorton).
-- Aparna Sasidharan, Aparna, and Snir, Space-filling Curves for Partitioning Adaptively Refined Meshes.
+<!-- - Aparna Sasidharan, Aparna, and Snir, Space-filling Curves for Partitioning Adaptively Refined Meshes. -->
 - Aparna Sasidharan, John R. Gilbert, Shang-Hua Teng, Yingzhou Li, A General Space-filling Curve Algorithm for Partitioning 2D Meshes, In Proceedings of the 2015 IEEE 17th International Conference on High Performance Computing and Communications (HPCC), 2015. DOI: 10.1109/HPCC-CSS-ICESS.2015.192.
 - Simon Byrne, GilbertCurves.jl, [https://github.com/CliMA/GilbertCurves.jl](https://github.com/CliMA/GilbertCurves.jl).
 - Jakub Červený, gilbert, [https://github.com/jakubcerveny/gilbert](https://github.com/jakubcerveny/gilbert).
