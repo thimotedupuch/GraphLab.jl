@@ -190,7 +190,7 @@ Pkg.resolve()
 
 ## Citation
 
-If you use **GraphLab.jl** in your research or teaching, please consider citing our upcoming paper:
+If you use **GraphLab.jl** in your research or teaching, please consider citing our work:
 ```
 @article{GraphLab2025,
 author = {Malik Lechekhab and collaborators},
@@ -210,10 +210,10 @@ We will update the citation once the paper is published.
 * [Olaf Schenk](https://search.usi.ch/en/people/9a52a2fdb8d3d26ec16fb1569b590909/schenk-olaf) (Institute of Computing, Università della Svizzera italiana)
 
 ## Acknowledgments  
-- Jeroen Baert, Libmorton: C++ Morton Encoding/Decoding Library, 2018. [Link](https://github.com/Forceflow/libmorton).
+- Jeroen Baert, Libmorton: C++ Morton Encoding/Decoding Library, 2018. [https://github.com/Forceflow/libmorton](https://github.com/Forceflow/libmorton).
 - Aparna Sasidharan, Aparna, and Snir, Space-filling Curves for Partitioning Adaptively Refined Meshes.
 - Aparna Sasidharan, John R. Gilbert, Shang-Hua Teng, Yingzhou Li, A General Space-filling Curve Algorithm for Partitioning 2D Meshes, In Proceedings of the 2015 IEEE 17th International Conference on High Performance Computing and Communications (HPCC), 2015. DOI: 10.1109/HPCC-CSS-ICESS.2015.192.
-- Simon Byrne, GilbertCurves.jl, [Link](https://github.com/CliMA/GilbertCurves.jl).
-- Jakub Červený, gilbert, [Link](https://github.com/jakubcerveny/gilbert).
-- Yingzhou Li, meshpart Toolbox, [Link](https://github.com/YingzhouLi/meshpart).
-We would also like to thank the authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.
+- Simon Byrne, GilbertCurves.jl, [https://github.com/CliMA/GilbertCurves.jl](https://github.com/CliMA/GilbertCurves.jl).
+- Jakub Červený, gilbert, [https://github.com/jakubcerveny/gilbert](https://github.com/jakubcerveny/gilbert).
+- Yingzhou Li, meshpart Toolbox, [https://github.com/YingzhouLi/meshpart](https://github.com/YingzhouLi/meshpart).
+- The authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.
