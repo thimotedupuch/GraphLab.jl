@@ -210,10 +210,9 @@ We will update the citation once the paper is published.
 * [Olaf Schenk](https://search.usi.ch/en/people/9a52a2fdb8d3d26ec16fb1569b590909/schenk-olaf) (Institute of Computing, Università della Svizzera italiana)
 
 ## Acknowledgments  
-- Jeroen Baert, Libmorton: C++ Morton Encoding/Decoding Library, 2018. [https://github.com/Forceflow/libmorton](https://github.com/Forceflow/libmorton).
-<!-- - Aparna Sasidharan, Aparna, and Snir, Space-filling Curves for Partitioning Adaptively Refined Meshes. -->
-- Aparna Sasidharan, John R. Gilbert, Shang-Hua Teng, Yingzhou Li, A General Space-filling Curve Algorithm for Partitioning 2D Meshes, In Proceedings of the 2015 IEEE 17th International Conference on High Performance Computing and Communications (HPCC), 2015. DOI: 10.1109/HPCC-CSS-ICESS.2015.192.
-- Simon Byrne, GilbertCurves.jl, [https://github.com/CliMA/GilbertCurves.jl](https://github.com/CliMA/GilbertCurves.jl).
-- Jakub Červený, gilbert, [https://github.com/jakubcerveny/gilbert](https://github.com/jakubcerveny/gilbert).
-- Yingzhou Li, meshpart Toolbox, [https://github.com/YingzhouLi/meshpart](https://github.com/YingzhouLi/meshpart).
-- The authors of [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl) for their work, which served as a reference for the graph plotting function in this project.
+- Baert, J., *Libmorton: C++ Morton Encoding/Decoding Library*, 2018. [Online]. Available: [https://github.com/Forceflow/libmorton](https://github.com/Forceflow/libmorton). [Accessed: May 30, 2025].
+- Sasidharan, A., Gilbert, J. R., Teng, S.-H., and Li, Y., “A General Space-filling Curve Algorithm for Partitioning 2D Meshes,” in Proc. 2015 IEEE 17th Int. Conf. on High Performance Computing and Communications (HPCC), Aug. 2015, pp. 1138–1145, doi: 10.1109/HPCC-CSS-ICESS.2015.192.
+- Byrne, S., *GilbertCurves.jl*. [Online]. Available: [https://github.com/CliMA/GilbertCurves.jl](https://github.com/CliMA/GilbertCurves.jl). [Accessed: May 30, 2025].
+- Červený, J., *gilbert*. [Online]. Available: [https://github.com/jakubcerveny/gilbert](https://github.com/jakubcerveny/gilbert). [Accessed: May 30, 2025].
+- Li, Y., *meshpart Toolbox*. [Online]. Available: [https://github.com/YingzhouLi/meshpart](https://github.com/YingzhouLi/meshpart). [Accessed: May 30, 2025].
+- Pitsianis, N., Iliopoulos, A.-S., Floros, D., and Sun, X., “Spaceland Embedding of Sparse Stochastic Graphs,” in Proc. IEEE High Performance Extreme Computing Conf. (HPEC), Sep. 2019, doi: 10.1109/HPEC.2019.8916505.
