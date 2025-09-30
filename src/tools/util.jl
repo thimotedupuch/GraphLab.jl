@@ -258,8 +258,24 @@ function airfoil()
     return A, coords
 end
 
-function load(name::Symbol)
-    name === :airfoil || error("Unknown dataset: $name. Available: :airfoil")
-    return airfoil()
+"""
+    swiss() -> (A::SparseMatrixCSC, coords::Matrix)
+
+Load the Swiss road graph from the `swiss_graph` artifact.
+"""
+function swiss()
+    dir  = artifact"swiss_graph"                    # ← name in Artifacts.toml
+    file = joinpath(dir, "swiss", "Swiss_graph.mat")# ← path inside tarball
+    d = MAT.matread(file)
+    A = sparse(d["CH_adj"])
+    coords = Matrix(d["CH_coords"])
+    return A, coords
 end
+
+
+load(name::Symbol) = name === :airfoil ? airfoil() :
+                     name === :swiss   ? swiss()   :
+                     error("Unknown dataset :$name. Available: :airfoil, :swiss")
+
+
 load(name::AbstractString) = load(Symbol(name))
