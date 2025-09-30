@@ -20,9 +20,6 @@ include("tools/part_adaptive_sfc.jl")
 include("tools/draw.jl")
 include("tools/util.jl")
 
-include("Examples.jl")
-using .GraphLabExamples
-
 export build_adjacency
 export count_edge_cut
 export compute_partition_balance
@@ -37,6 +34,7 @@ export part_sfc
 export part_adaptive_sfc
 export recursive_bisection
 export nested_dissection
+export airfoil, load
 
 end # module GraphLab
 

@@ -1,4 +1,4 @@
-using Graphs
+using Graphs, Artifacts, MAT, SparseArrays
 
 
 """
@@ -242,3 +242,24 @@ function _partition(coords::Matrix, v::Vector)
 
     return a, b
 end
+
+
+"""
+    airfoil() -> (A::SparseMatrixCSC, coords::Matrix)
+
+Load the SuiteSparse airfoil example from the `airfoil1` artifact.
+"""
+function airfoil()
+    dir  = artifact"airfoil1"
+    file = joinpath(dir, "airfoil", "airfoil1.mat")
+    d      = MAT.matread(file)
+    A      = sparse(d["Problem"]["A"])
+    coords = Matrix(d["Problem"]["aux"]["coord"])
+    return A, coords
+end
+
+function load(name::Symbol)
+    name === :airfoil || error("Unknown dataset: $name. Available: :airfoil")
+    return airfoil()
+end
+load(name::AbstractString) = load(Symbol(name))
