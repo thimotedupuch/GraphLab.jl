@@ -1,14 +1,10 @@
-module GraphLabExamples
+module LoadGraph
 using Pkg.Artifacts, MAT, SparseArrays
 export airfoil
-
-"Return (A::SparseMatrixCSC, coords::Matrix) from the airfoil artifact."
 function airfoil()
-    dir  = artifact"airfoil1"
+    dir = artifact"airfoil1"
     file = joinpath(dir, "airfoil", "airfoil1.mat")
-    d      = MAT.matread(file)
-    A      = sparse(d["Problem"]["A"])
-    coords = Matrix(d["Problem"]["aux"]["coord"])
-    return A, coords
+    d = MAT.matread(file)
+    return sparse(d["Problem"]["A"]), Matrix(d["Problem"]["aux"]["coord"])
 end
 end
