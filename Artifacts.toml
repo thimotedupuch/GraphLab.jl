@@ -9,5 +9,5 @@ git-tree-sha1 = "e22f17dae3f1abb6cb30ae1b7aab77a85d1da901"
 git-tree-sha1 = "076a15c652f18d64c6ce59c90e64680e1a6ce919"
 
     [[swiss_graph.download]]
-    sha256 = "f3720ace5940d70252afc9453cc967d5795886d3de44f4d18d418d8bfe6186c5"
+    sha256 = "e53246a44b9831828e21e1c3a72b0fe65c0278a19f249cfab7cee016e4adf9f0"
     url = "https://github.com/lechekhabm/GraphLab.jl/releases/download/artifacts-v2/swiss_graph_artifact.tar.gz"
