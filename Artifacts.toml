@@ -1,0 +1,6 @@
+[airfoil1]
+git-tree-sha1 = "e22f17dae3f1abb6cb30ae1b7aab77a85d1da901"
+
+    [[airfoil1.download]]
+    sha256 = "6894bfe9c1e8d431eb6bcb2e8ff8ce39dd794589238e21b2173051d4f375146a"
+    url = "https://github.com/lechekhabm/GraphLab.jl/releases/download/artifacts-v1/airfoil1_artifact.tar.gz"
