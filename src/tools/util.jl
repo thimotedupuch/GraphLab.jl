@@ -288,11 +288,10 @@ function france()
 end
 
 
-load(name::Symbol) = 
-    name === :airfoil && return airfoil()
-    name === :swiss   && return swiss()
-    name === :france  && return france()
-    error("Unknown dataset :$name. Available: :airfoil, :swiss, :france")
+load(name::Symbol) = name === :airfoil ? airfoil() :
+                     name === :swiss   ? swiss()   :
+                     name === :france   ? france()   :
+                     error("Unknown dataset :$name. Available: :airfoil, :swiss")
 
 
 load(name::AbstractString) = load(Symbol(name))
