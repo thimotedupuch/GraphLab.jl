@@ -273,9 +273,26 @@ function swiss()
 end
 
 
-load(name::Symbol) = name === :airfoil ? airfoil() :
-                     name === :swiss   ? swiss()   :
-                     error("Unknown dataset :$name. Available: :airfoil, :swiss")
+"""
+    france() -> (A::SparseMatrixCSC, coords::Matrix)
+
+Load the France graph from the `france_graph` artifact.
+"""
+function france()
+    dir  = artifact"france_graph"
+    file = joinpath(dir, "france", "france_graph.mat")
+    d = MAT.matread(file)
+    A = sparse(d["A"])
+    coords = Matrix(d["coords"])
+    return A, coords
+end
+
+
+load(name::Symbol) = 
+    name === :airfoil && return airfoil()
+    name === :swiss   && return swiss()
+    name === :france  && return france()
+    error("Unknown dataset :$name. Available: :airfoil, :swiss, :france")
 
 
 load(name::AbstractString) = load(Symbol(name))

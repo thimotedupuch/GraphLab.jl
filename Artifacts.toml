@@ -5,6 +5,13 @@ git-tree-sha1 = "e22f17dae3f1abb6cb30ae1b7aab77a85d1da901"
     sha256 = "6894bfe9c1e8d431eb6bcb2e8ff8ce39dd794589238e21b2173051d4f375146a"
     url = "https://github.com/lechekhabm/GraphLab.jl/releases/download/artifacts-v1/airfoil1_artifact.tar.gz"
 
+[france_graph]
+git-tree-sha1 = "01887ddbbf788f0c60c149ca78a7e24f930fc31f"
+
+    [[france_graph.download]]
+    sha256 = "8111c1157ad94e4778c934806f46d3d0ea711a878f6f55327b30b4be5b50ca42"
+    url = "https://github.com/lechekhabm/GraphLab.jl/releases/download/artifacts-v3/france_graph_artifact.tar.gz"
+
 [swiss_graph]
 git-tree-sha1 = "076a15c652f18d64c6ce59c90e64680e1a6ce919"
 

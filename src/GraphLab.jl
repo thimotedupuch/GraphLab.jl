@@ -34,7 +34,7 @@ export part_sfc
 export part_adaptive_sfc
 export recursive_bisection
 export nested_dissection
-export airfoil, swiss, load
+export airfoil, swiss, france, load
 
 end # module GraphLab
 
