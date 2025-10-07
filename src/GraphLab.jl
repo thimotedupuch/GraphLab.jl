@@ -22,6 +22,7 @@ include("tools/util.jl")
 
 export build_adjacency
 export count_edge_cut
+export ratio_cut
 export compute_partition_balance
 export draw_graph
 export part_coordinate

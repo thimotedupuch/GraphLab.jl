@@ -44,7 +44,7 @@ using Graphs
     ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer}) -> Float64
 
 Compute the Ratio Cut:
-    Rcut(p) = sum_j cut(S_j, ¯S_j) / |S_j|
+    Rcut(p) = sum_j cut(p_j, ¯p_j) / |p_j|
 
 - `A`: (0/1) adjacency (dense or sparse). Nonzeros are treated as edges.
 - `p`: partition labels (length == number of vertices). Labels can be any integers.
@@ -80,7 +80,7 @@ function ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer})
         end
     end
 
-    # Sum_j cut(S_j, ¯S_j)/|S_j|
+    # Sum_j cut(p_j, ¯p_j)/|p_j|
     return sum(boundary[i] / sizes[i] for i in 1:k)
 end
 
