@@ -24,7 +24,7 @@ It provides a growing set of accessible methods, including:
 
 The package includes utilities for:
 * Generating graphs and adjacency matrices.
-* Measuring partition quality.
+* Measuring partition quality through edge-cut count, ratio cut and normalized cut.
 * Visualizing partitioned graphs.
 * Benchmarking and comparing with external partitioners.
 ``GraphLab.jl`` aims to support the educational and exploratory needs of learners, researchers, and the Julia graph community.
