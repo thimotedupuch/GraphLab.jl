@@ -38,8 +38,6 @@ function count_edge_cut(A::AbstractMatrix, p::AbstractVector)
 end
 
 
-using Graphs
-
 """
     ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer}) -> Float64
 
@@ -83,6 +81,48 @@ function ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer})
     # Sum_j cut(p_j, ¯p_j)/|p_j|
     return sum(boundary[i] / sizes[i] for i in 1:k)
 end
+
+
+using Graphs
+
+"""
+    normalized_cut(A::AbstractMatrix, p::AbstractVector{<:Integer}) -> Float64
+
+Compute Ncut(p) = ∑_j cut(p_j, ¯p_j) / vol(p_j), where vol(p_j) = ∑_{v∈p_j} degree(v).
+
+Assumes an undirected, unweighted adjacency (nonzeros -> edges).
+"""
+function normalized_cut(A::AbstractMatrix, p::AbstractVector{<:Integer})
+    g = SimpleGraph(A)
+    nv(g) == length(p) || throw(ArgumentError("length(p) must equal number of vertices"))
+
+    # relabel cluster ids to 1..k
+    labs = collect(unique(p))
+    k = length(labs)
+    idx_of = Dict(l => i for (i,l) in enumerate(labs))
+
+    # volumes: sum of degrees per cluster
+    vol = zeros(Int, k)
+    @inbounds for v in 1:nv(g)
+        vol[idx_of[p[v]]] += degree(g, v)
+    end
+    any(vol .== 0) && throw(ArgumentError("Cluster with zero volume (all isolated nodes) not allowed"))
+
+    # boundary cuts per cluster (each crossing edge adds 1 to both endpoint clusters)
+    bnd = zeros(Int, k)
+    @inbounds for e in edges(g)
+        u, v = src(e), dst(e)
+        lu, lv = p[u], p[v]
+        if lu != lv
+            iu, iv = idx_of[lu], idx_of[lv]
+            bnd[iu] += 1
+            bnd[iv] += 1
+        end
+    end
+
+    return sum(bnd[i] / vol[i] for i in 1:k)
+end
+
 
 
 
