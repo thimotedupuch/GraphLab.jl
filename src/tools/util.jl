@@ -38,6 +38,54 @@ function count_edge_cut(A::AbstractMatrix, p::AbstractVector)
 end
 
 
+using Graphs
+
+"""
+    ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer}) -> Float64
+
+Compute the Ratio Cut:
+    Rcut(p) = sum_j cut(S_j, ¯S_j) / |S_j|
+
+- `A`: (0/1) adjacency (dense or sparse). Nonzeros are treated as edges.
+- `p`: partition labels (length == number of vertices). Labels can be any integers.
+
+Counts each inter-cluster edge once for each endpoint's cluster (as per definition).
+"""
+function ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer})
+    g = SimpleGraph(A)
+    nv(g) == length(p) || throw(ArgumentError("length(p) must equal number of vertices"))
+
+    # Map labels -> contiguous indices 1..k
+    labels = collect(unique(p))
+    k = length(labels)
+    idx_of = Dict(l => i for (i, l) in enumerate(labels))
+
+    # Sizes and boundary counts per cluster
+    sizes = zeros(Int, k)
+    for l in p
+        sizes[idx_of[l]] += 1
+    end
+    any(==(0), sizes) && throw(ArgumentError("Empty clusters are not allowed"))
+
+    boundary = zeros(Int, k)
+
+    # Accumulate boundary counts (each crossing edge adds 1 to both endpoint clusters)
+    for e in edges(g)
+        u, v = src(e), dst(e)
+        lu, lv = p[u], p[v]
+        if lu != lv
+            iu, iv = idx_of[lu], idx_of[lv]
+            boundary[iu] += 1
+            boundary[iv] += 1
+        end
+    end
+
+    # Sum_j cut(S_j, ¯S_j)/|S_j|
+    return sum(boundary[i] / sizes[i] for i in 1:k)
+end
+
+
+
 """
     build_adjacency(edges::Matrix{Int}, num_nodes::Int)
 
