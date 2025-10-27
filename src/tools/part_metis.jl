@@ -1,4 +1,4 @@
-# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
+# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch
 using Metis
 """
     part_metis(A::SparseMatrixCSC, k::Int, alg::Symbol)
@@ -21,14 +21,13 @@ julia> part_metis(A, 2, :RECURSIVE)
  2
 ```
 """
-function part_metis(A::SparseMatrixCSC, k::Int=2, alg::Symbol=:KWAY)
-
-    if alg != :KWAY && alg != :RECURSIVE
-        throw(ArgumentError("Invalid algorithm: $alg. Must be :KWAY or :RECURSIVE"))
-    end
-    
+function part_metis(
+    A::SparseMatrixCSC,
+    k::Int=2,
+    alg::Union{:KWAY,:RECURSIVE}=:KWAY
+)
     g = Graph(A)
-    p = Metis.partition(g, k, alg = alg)
+    p = Metis.partition(g, k, alg=alg)
     p = Int.(p)
     return p
 end

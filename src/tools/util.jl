@@ -37,6 +37,9 @@ function count_edge_cut(A::AbstractMatrix, p::AbstractVector)
     return edge_cut
 end
 
+function count_edge_cut(A::AbstractMatrix, p::AbstractVector)
+    sum(p[src(e)] != p[dst(e)] for e in edges(SimpleGraph(A)))
+end
 
 """
     ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer}) -> Float64
@@ -63,7 +66,7 @@ function ratio_cut(A::AbstractMatrix, p::AbstractVector{<:Integer})
     for l in p
         sizes[idx_of[l]] += 1
     end
-    any(==(0), sizes) && throw(ArgumentError("Empty clusters are not allowed"))
+    any(iszero, sizes) && throw(ArgumentError("Empty clusters are not allowed"))
 
     boundary = zeros(Int, k)
 
@@ -99,7 +102,7 @@ function normalized_cut(A::AbstractMatrix, p::AbstractVector{<:Integer})
     # relabel cluster ids to 1..k
     labs = collect(unique(p))
     k = length(labs)
-    idx_of = Dict(l => i for (i,l) in enumerate(labs))
+    idx_of = Dict(l => i for (i, l) in enumerate(labs))
 
     # volumes: sum of degrees per cluster
     vol = zeros(Int, k)
@@ -160,8 +163,8 @@ end
 Generate a predefined adjacency matrix and corresponding node coordinates.
 
 # Arguments
-- `type::String`: Type of graph to generate.  
-  - `"network"`: A predefined network structure.  
+- `type::String`: Type of graph to generate.
+  - `"network"`: A predefined network structure.
   - `"triangles"`: A small triangular mesh structure.
 
 # Returns
@@ -174,32 +177,32 @@ julia> A, coords = build_adjacency("network")
 ```
 """
 function build_adjacency(type::String)
-    if type=="network"
-        A = [[0. 1. 1. 0. 0. 1. 0. 0. 1. 1.]
-            [1. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
-            [1. 1. 0. 0. 0. 0. 0. 0. 0. 0.]
-            [0. 0. 0. 0. 1. 1. 0. 0. 0. 0.]
-            [0. 0. 0. 1. 0. 1. 0. 0. 0. 0.]
-            [1. 0. 0. 1. 1. 0. 1. 1. 0. 0.]
-            [0. 0. 0. 0. 0. 1. 0. 1. 0. 0.]
-            [0. 0. 0. 0. 0. 1. 1. 0. 0. 0.]
-            [1. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
-            [1. 0. 0. 0. 0. 0. 0. 0. 1. 0.]]
+    if type == "network"
+        A = [[0.0 1.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 1.0]
+            [1.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+            [1.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+            [0.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0 0.0 0.0]
+            [0.0 0.0 0.0 1.0 0.0 1.0 0.0 0.0 0.0 0.0]
+            [1.0 0.0 0.0 1.0 1.0 0.0 1.0 1.0 0.0 0.0]
+            [0.0 0.0 0.0 0.0 0.0 1.0 0.0 1.0 0.0 0.0]
+            [0.0 0.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0 0.0]
+            [1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0]
+            [1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0]]
         A = sparse(A)
         x = [3.0 1.0 2.0 4.0 5.0 3.0 2.0 1.0 5.0 4.0]
         y = [2.0 1.0 1.0 5.0 5.0 4.0 5.0 5.0 1.0 1.0]
-    elseif type=="triangles"
-        A = [   [0. 1. 1. 1. 0. 0. ]
-                [1. 0. 1. 0. 1. 0. ]
-                [1. 1. 0. 0. 0. 1. ]
-                [1. 0. 0. 0. 1. 1. ]
-                [0. 1. 0. 1. 0. 1. ]
-                [0. 0. 1. 1. 1. 0. ]]
+    elseif type == "triangles"
+        A = [[0.0 1.0 1.0 1.0 0.0 0.0]
+            [1.0 0.0 1.0 0.0 1.0 0.0]
+            [1.0 1.0 0.0 0.0 0.0 1.0]
+            [1.0 0.0 0.0 0.0 1.0 1.0]
+            [0.0 1.0 0.0 1.0 0.0 1.0]
+            [0.0 0.0 1.0 1.0 1.0 0.0]]
         A = sparse(A)
         x = [2.0 4.0 4.0 0.0 6.0 6.0]
         y = [3.0 2.0 4.0 3.0 0.0 6.0]
     end
-    
+
     coords = hcat(vec(x), vec(y))
 
     return A, coords
@@ -224,11 +227,11 @@ julia> p = [1, 1, 2, 2, 2, 3, 3, 3, 3]  # Example partitioning
 julia> balance = compute_partition_balance(p)
 julia> println(balance)  # Output close to 1 for balanced partitions
 ```
-""" 
+"""
 function compute_partition_balance(p::AbstractVector)
     # Count the number of vertices in each partition
-    partition_sizes = Dict{eltype(p), Int}()
-    
+    partition_sizes = Dict{eltype(p),Int}()
+
     for part in p
         partition_sizes[part] = get(partition_sizes, part, 0) + 1
     end
@@ -259,7 +262,7 @@ function grid_graph(n::Int, m::Int, α::Float64)
     # Generate original (unrotated) coordinates and edges
     for i in 1:n
         for j in 1:m
-            idx = (i-1)*m + j
+            idx = (i - 1) * m + j
             x, y = j, n - i + 1
             coords[:, idx] = [x, y]
             # Right neighbor
@@ -305,7 +308,7 @@ julia> _partition(coords, [0, 1])
 """
 function _partition(coords::Matrix, v::Vector)
     n, d = size(coords)
-    
+
     v = v[:]
     dotprod = coords * v
     split = median(dotprod)
@@ -314,17 +317,17 @@ function _partition(coords::Matrix, v::Vector)
     c = findall(x -> x == split, dotprod)
     nc = length(c)
     # nc = 0
-    
+
     if nc != 0
         na = length(a)
-        nca = Int64(max(ceil(n/2)-na, 0))
+        nca = Int64(max(ceil(n / 2) - na, 0))
         nca = Int64(min(nca, nc))
 
         if nca > 0
             a = [a; c[1:nca]]
         end
         if nca < nc
-            b = [b; c[nca + 1: nc]]
+            b = [b; c[nca+1:nc]]
         end
     end
 
@@ -338,10 +341,10 @@ end
 Load the SuiteSparse airfoil example from the `airfoil1` artifact.
 """
 function airfoil()
-    dir  = artifact"airfoil1"
+    dir = artifact"airfoil1"
     file = joinpath(dir, "airfoil", "airfoil1.mat")
-    d      = MAT.matread(file)
-    A      = sparse(d["Problem"]["A"])
+    d = MAT.matread(file)
+    A = sparse(d["Problem"]["A"])
     coords = Matrix(d["Problem"]["aux"]["coord"])
     return A, coords
 end
@@ -352,7 +355,7 @@ end
 Load the Swiss road graph from the `swiss_graph` artifact.
 """
 function swiss()
-    dir  = artifact"swiss_graph"                    # ← name in Artifacts.toml
+    dir = artifact"swiss_graph"                    # ← name in Artifacts.toml
     file = joinpath(dir, "swiss", "Swiss_graph.mat")# ← path inside tarball
     d = MAT.matread(file)
     A = sparse(d["CH_adj"])
@@ -367,7 +370,7 @@ end
 Load the France graph from the `france_graph` artifact.
 """
 function france()
-    dir  = artifact"france_graph"
+    dir = artifact"france_graph"
     file = joinpath(dir, "france", "france_graph.mat")
     d = MAT.matread(file)
     A = sparse(d["A"])
@@ -377,8 +380,8 @@ end
 
 
 load(name::Symbol) = name === :airfoil ? airfoil() :
-                     name === :swiss   ? swiss()   :
-                     name === :france   ? france()   :
+                     name === :swiss ? swiss() :
+                     name === :france ? france() :
                      error("Unknown dataset :$name. Available: :airfoil, :swiss")
 
 

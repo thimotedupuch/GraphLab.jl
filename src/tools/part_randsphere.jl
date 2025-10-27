@@ -17,7 +17,7 @@ Returns: n × (d+1) matrix on the unit sphere
 """
 function _stereoup(coords::Matrix{Float64})
     n, d = size(coords)
-    lifted = zeros(n, d+1)
+    lifted = zeros(n, d + 1)
 
     for i in 1:n
         x = coords[i, :]
@@ -61,31 +61,31 @@ Returns:
 """
 function _conmap(c::Vector{Float64}, xyz::Matrix{Float64})
     d = size(xyz, 2)
-  
+
     # Compute reflection and stretch
     Q, r = _reflector(c)
-    alpha = sqrt((1+r)/(1-r))
-  
+    alpha = sqrt((1 + r) / (1 - r))
+
     # Reflect
-    xyzref = xyz * Q;
-  
+    xyzref = xyz * Q
+
     # Handle north pole in the stereographic projection
-    norths = findall(x -> abs(x - 1) < sqrt(eps()), xyzref[:, d]) 
+    norths = findall(x -> abs(x - 1) < sqrt(eps()), xyzref[:, d])
     if isempty(norths)
-      xyzn = xyzref[norths, :]
-      xyzref[norths, :] = zeros(length(norths), d)
+        xyzn = xyzref[norths, :]
+        xyzref[norths, :] = zeros(length(norths), d)
     end
-  
+
     xyref = _stereodown(xyzref)
-  
+
     # Stretch
     xymap = xyref ./ alpha
     xyzmap = _stereoup(xymap)
-  
+
     if isempty(norths)
-      xyzmap[norths,:] = xyzn
+        xyzmap[norths, :] = xyzn
     end
-  
+
     return xyzmap, xymap
 end
 
@@ -137,14 +137,14 @@ in ℝ^{d} (embedded in ℝ^{d+1}) back to Euclidean space ℝ^{d}.
 function _stereodown(xyz)
     n, dim = size(xyz)
     xy = xyz[:, 1:dim-1] ./ (1 .- xyz[:, dim])  # broadcasting does the repetition
-  
+
     return xy
 end
 
 
 """
   _sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
-  
+
 Try ntrials random great circle cuts on unit-sphere data.
 
 Arguments:
@@ -158,28 +158,28 @@ Returns:
 """
 function _sepcircle(A::SparseMatrixCSC, X::Matrix{Float64}, ntrials::Int)
     _, d = size(X)
-    M = (X' * X) ^ 2
-  
+    M = (X' * X)^2
+
     vv = randn(ntrials, d) * M
-    
-    bestcut = Inf;
+
+    bestcut = Inf
     bestdir = vv[1, :]
-  
-    for i in 1:size(vv, 1)
-      v = vv[i, :]
-  
-      if norm(v) != 0
-        currentcut = _sepquality(v, A, X)
-      end
-  
-      if bestcut > currentcut
-        bestcut = currentcut
-        bestdir = v
-      end
+
+    for i in axes(vv, 1)
+        v = vv[i, :]
+
+        if norm(v) != 0
+            currentcut = _sepquality(v, A, X)
+        end
+
+        if bestcut > currentcut
+            bestcut = currentcut
+            bestdir = v
+        end
     end
-  
-    return bestdir, bestcut 
-  
+
+    return bestdir, bestcut
+
 end
 
 
@@ -205,7 +205,7 @@ function _sepquality(v::Vector{Float64}, A::SparseMatrixCSC, xyz::Matrix{Float64
     a, b = _partition(xyz, v)
     # cutsize = nnz(Bool.(A[a, b]) .| Bool.(A[b, a]'))
     cutsize = nnz((A[a, b] .!= 0) .| (A[b, a]' .!= 0))
-  
+
     return cutsize
 end
 
@@ -226,29 +226,29 @@ Returns:
 """
 function _sepline(A::SparseMatrixCSC, xy::Matrix{Float64}, ntrials::Int)
     d = size(xy, 2)
-  
-    _, S, V = svd(xy);
-  
-    exponent = 2*(d+1)/(ntrials-1)
-    s = diagm(S).^exponent
+
+    _, S, V = svd(xy)
+
+    exponent = 2 * (d + 1) / (ntrials - 1)
+    s = diagm(S) .^ exponent
     W = V * s * V'
     vv = randn(ntrials, d) * W
     rownorms = sqrt.(sum(vv .* vv, dims=2))
     vv = Diagonal(vec(1 ./ rownorms)) * vv
-  
+
     bestcut = Inf
     bestdir = vv[1, :]
     for i in 1:ntrials
-      v = vv[i, :]
-      cut = _sepquality(v, A, xy)
-      if cut < bestcut
-        bestcut = cut
-        bestdir = v
-      end
+        v = vv[i, :]
+        cut = _sepquality(v, A, xy)
+        if cut < bestcut
+            bestcut = cut
+            bestdir = v
+        end
     end
-  
-    return bestdir, bestcut 
-  end
+
+    return bestdir, bestcut
+end
 
 
 """
@@ -267,57 +267,57 @@ Returns:
 function part_randsphere(A::SparseMatrixCSC, coords::Matrix{Float64}; ntrials::Int=30)
     n, d = size(coords)
 
-  # How to split the tries
-  nlines = floor(Int, (ntrials / 2) ^ (d / (d + 1))) # number of lines to try (fallback)
-  nouter = ceil(Int, log(ntrials - nlines + 1) / log(20)) # number of _centerpoints to try
-  ninner = floor(Int, (ntrials - nlines) / nouter) # number of random directions (great circles) to test for each _centerpoint.
-  nlines = ntrials - nouter * ninner # Rounding
+    # How to split the tries
+    nlines = floor(Int, (ntrials / 2)^(d / (d + 1))) # number of lines to try (fallback)
+    nouter = ceil(Int, log(ntrials - nlines + 1) / log(20)) # number of _centerpoints to try
+    ninner = floor(Int, (ntrials - nlines) / nouter) # number of random directions (great circles) to test for each _centerpoint.
+    nlines = ntrials - nouter * ninner # Rounding
 
-  # Normalize coordinates: center and scale
-  xy_shift = mean(coords, dims=1)
-  xy = coords .- xy_shift
-  scale = maximum(abs.(xy))
-  xy ./= scale
+    # Normalize coordinates: center and scale
+    xy_shift = mean(coords, dims=1)
+    xy = coords .- xy_shift
+    scale = maximum(abs.(xy))
+    xy ./= scale
 
-  # Project to sphere
-  xyz = _stereoup(xy)
+    # Project to sphere
+    xyz = _stereoup(xy)
 
-  # Spherical sperator search
-  csample = min(n, (d + 3)^4)
-  bestcut = Inf
-  bestdir = bestcpt = fill(NaN, d + 1)
+    # Spherical sperator search
+    csample = min(n, (d + 3)^4)
+    bestcut = Inf
+    bestdir = bestcpt = fill(NaN, d + 1)
 
-  for _ in 1:nouter
-    cpt = _centerpoint(xyz, csample)
-    if 1 - norm(cpt) < sqrt(eps())
-      dc = randn(size(cpt))
-      cpt = 0.9 * cpt + dc / (20 * norm(dc))
+    for _ in 1:nouter
+        cpt = _centerpoint(xyz, csample)
+        if 1 - norm(cpt) < sqrt(eps())
+            dc = randn(size(cpt))
+            cpt = 0.9 * cpt + dc / (20 * norm(dc))
+        end
+        xyzmap, _ = _conmap(cpt, xyz)
+        circledir, circlecut = _sepcircle(A, xyzmap, ninner)
+        if circlecut < bestcut
+            bestcut = circlecut
+            bestdir = circledir
+            bestcpt = cpt
+        end
     end
-    xyzmap, _ = _conmap(cpt, xyz)
-    circledir, circlecut = _sepcircle(A, xyzmap, ninner)
-    if circlecut < bestcut
-      bestcut = circlecut
-      bestdir = circledir
-      bestcpt = cpt
+
+    linedir, linecut = _sepline(A, xy, nlines)
+
+    if linecut < bestcut
+        bestcut = linecut
+        bestdir = linedir
+        p1, p2 = _partition(xy, linedir)
+    else
+        bestmap, _ = _conmap(bestcpt, xyz)
+        p1, p2 = _partition(bestmap, bestdir)
     end
-  end
 
-  linedir, linecut = _sepline(A, xy, nlines)
+    p = ones(Int, n)
+    p[p1] .= 1
+    p[p2] .= 2
 
-  if linecut < bestcut
-    bestcut = linecut
-    bestdir = linedir
-    p1, p2 = _partition(xy, linedir)
-  else
-    bestmap, _  = _conmap(bestcpt, xyz)
-    p1, p2 = _partition(bestmap, bestdir)
-  end
-
-  p = ones(Int, n)
-  p[p1] .= 1
-  p[p2] .= 2
-
-  return p
+    return p
 end
 
 

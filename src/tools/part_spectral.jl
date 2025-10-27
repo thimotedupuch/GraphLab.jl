@@ -1,4 +1,4 @@
-# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch 
+# M.L. for High Performance Computing Lab @USI & @ETHZ - malik.lechekhab@usi.ch
 using Arpack, Statistics, Random
 
 
@@ -26,8 +26,8 @@ julia> part_spectral(A)
 function part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
     n = size(A)[1]
 
-    if n > 4*10^4
-        @warn "graph is large. Computing eigen values may take too long."     
+    if n > 4E4 # Why this value specifically ?
+        @warn "graph is large. Computing eigen values may take too long."
     end
 
     # 1. Construct the Laplacian matrix.
@@ -41,9 +41,9 @@ function part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
 
     # 2. Compute its eigendecomposition.
     # v0 = ones(n)
-    local_rng = MersenneTwister(1234)
+    local_rng = MersenneTwister(1234) # Why this seed ? Does it need to be changed by the user ?
     v0 = randn(local_rng, n)
-    eig_vals, eig_vecs = Arpack.eigs(L; which=:SR, nev=2, v0=v0, ncv = 300)
+    eig_vals, eig_vecs = Arpack.eigs(L; which=:SR, nev=2, v0=v0, ncv=300)
 
     ev2 = eig_vecs[:, sortperm(eig_vals)[2]]
     # ev3 = eig_vecs[:, sortperm(eig_vals)[3]]
@@ -52,7 +52,7 @@ function part_spectral(A::SparseMatrixCSC; fiedler::Bool=false)
     # 3. Label the vertices with the entries of the Fiedler vector.
     m = median(fiedler_vec)
     # 4. Partition them around their median value, or 0.
-    p = map(x->x .> m, fiedler_vec).+1
+    p = map(x -> x .> m, fiedler_vec) .+ 1
     # 5. Return the indicator vector
     return p
 end

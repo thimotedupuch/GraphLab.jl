@@ -7,7 +7,9 @@ const traversal_counter = Ref(1);
 
 A node in a 2D kd-tree data structure, representing a spatial region and its recursive subdivision.
 
-Each node contains bounding box coordinates, optional _splitting information, and links to child nodes. The node can also store associated data points and optional entry/exit traversal symbols for space-filling curve traversal.
+Each node contains bounding box coordinates, optional _splitting information, and links to child nodes.
+The node can also store associated data points and optional entry/exit traversal symbols
+for space-filling curve traversal.
 
 # Fields
 - `bbox::Tuple{Tuple{Float64, Float64}, Tuple{Float64, Float64}}`: Bounding box as `(min_coords, max_coords)`.
@@ -22,16 +24,16 @@ Each node contains bounding box coordinates, optional _splitting information, an
 - `exit::Union{Symbol, Nothing}`: Optional exit symbol for space-filling curve traversal.
 """
 mutable struct KdNode
-    bbox::Tuple{Tuple{Float64, Float64}, Tuple{Float64, Float64}}  # (min_coords, max_coords)
-    _splitdim::Union{Int, Nothing}
-    _splitval::Union{Float64, Nothing}
-    left::Union{KdNode, Nothing}
-    right::Union{KdNode, Nothing}
+    bbox::Tuple{Tuple{Float64,Float64},Tuple{Float64,Float64}}  # (min_coords, max_coords)
+    _splitdim::Union{Int,Nothing}
+    _splitval::Union{Float64,Nothing}
+    left::Union{KdNode,Nothing}
+    right::Union{KdNode,Nothing}
     is_leaf::Bool
     is_root::Bool
     data::Matrix{Float64}
-    entry::Union{Symbol, Nothing}
-    exit::Union{Symbol, Nothing}
+    entry::Union{Symbol,Nothing}
+    exit::Union{Symbol,Nothing}
 end
 
 
@@ -44,7 +46,8 @@ This function builds a kd-tree from node coordinates, traverses the tree followi
 an adaptive space-filling curve, and assigns partition labels based on traversal order.
 It returns a partition vector that assigns each node to one of `k` partitions.
 
-This algorithm is based on "A General Space-filling Curve Algorithm for Partitioning 2D Meshes" (Aparna et al., 2015, DOI: 10.1109/HPCC-CSS-ICESS.2015.192)
+This algorithm is based on "A General Space-filling Curve Algorithm for Partitioning 2D Meshes"
+(Aparna et al., 2015, DOI: 10.1109/HPCC-CSS-ICESS.2015.192)
 and "Space-filling Curves for Partitioning Adaptively Refined Meshes" (Sasidharan, Aparna, and Snir).
 
 
@@ -63,25 +66,25 @@ julia> part = part_adaptive_sfc(A, coords, 4)
 ```
 """
 function part_adaptive_sfc(A::SparseMatrixCSC, coords::Matrix, k::Int=2)
-    n = size(A, 1);
+    n = size(A, 1)
 
-    coords_with_idx = hcat(coords, collect(1:n)); # Assuming that nodes ids are {1, 2, ..., n}
+    coords_with_idx = hcat(coords, collect(1:n)) # Assuming that nodes ids are {1, 2, ..., n}
 
     # Build the kd-Tree
-    tree = _build_tree(coords_with_idx);
+    tree = _build_tree(coords_with_idx)
 
     # Start traversal of the tree
-    traversal_counter[] = 1;
-    traversal_data = _traverse_kd(tree, :L, :R);
+    traversal_counter[] = 1
+    traversal_data = _traverse_kd(tree, :L, :R)
 
     # Extract x, y coordinates and traversal order from each leaf’s data
-    xs = [leaf_data[1] for leaf_data in traversal_data];
-    ys = [leaf_data[2] for leaf_data in traversal_data];
-    sfc_order = Int.([leaf_data[3] for leaf_data in traversal_data]);
+    xs = [leaf_data[1] for leaf_data in traversal_data]
+    ys = [leaf_data[2] for leaf_data in traversal_data]
+    sfc_order = Int.([leaf_data[3] for leaf_data in traversal_data])
 
-    part = _get_partition(sfc_order, k);
+    part = _get_partition(sfc_order, k)
 
-    return part;
+    return part
 end
 
 
@@ -165,23 +168,51 @@ function _build_tree(coords::Matrix{Float64}, is_root::Bool=true)
     n = size(coords, 1)
     if n <= 1
         bbox = _bounding_box(coords)
-        return KdNode(bbox, nothing, nothing, nothing, nothing, true, is_root, coords, nothing, nothing)
+        return KdNode(
+            bbox,
+            nothing,
+            nothing,
+            nothing,
+            nothing,
+            true,
+            is_root,
+            coords,
+            nothing,
+            nothing
+        )
     end
 
-    bbox = _bounding_box(coords) 
-    spans = bbox[2] .- bbox[1] 
-    _splitdim = argmax(spans) 
+    bbox = _bounding_box(coords)
+    spans = bbox[2] .- bbox[1]
+    _splitdim = argmax(spans)
     left_coords, right_coords, _splitval = _split(coords, _splitdim)
-    
+
     left_node = _build_tree(left_coords, false)
     right_node = _build_tree(right_coords, false)
 
-    return KdNode(bbox, _splitdim, _splitval, left_node, right_node, false, is_root, zeros(0,3), nothing, nothing)
+    return KdNode(
+        bbox,
+        _splitdim,
+        _splitval,
+        left_node,
+        right_node,
+        false,
+        is_root,
+        zeros(0, 3),
+        nothing,
+        nothing
+    )
 end
 
 
 """
-    _traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any}=[])
+    _traverse_kd(
+    node::KdNode,
+    entry::Symbol=:L,
+    exit::Symbol=:R,
+    last_exits::Vector{Any}=[],
+    acc::Vector{Any}=[]
+)
 
 Traverse a kd-tree following an adaptive space-filling curve and collect leaf data.
 
@@ -206,13 +237,19 @@ julia> data = _traverse_kd(tree)
 [[x1, y1, id1], [x2, y2, id2], ...]
 ```
 """
-function _traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exits::Vector{Any}=[], acc::Vector{Any} = [])
+function _traverse_kd(
+    node::KdNode,
+    entry::Symbol=:L,
+    exit::Symbol=:R,
+    last_exits::Vector{Any}=[],
+    acc::Vector{Any}=[]
+)
     node.entry = entry
     node.exit = exit
 
     # If the node is empty, stop.
     # If it’s a leaf, count it, save its data in the accumulator, and return its coordinates.
-    if node === nothing
+    if isnothing(node)
         return
     elseif node.is_leaf
         exit_pt = node.bbox[1]
@@ -232,20 +269,20 @@ function _traverse_kd(node::KdNode, entry::Symbol=:L, exit::Symbol=:R, last_exit
     # Determine the order of child traversal
     order = _step(node.entry, node.exit, node._splitdim, entry_pt, node._splitval)
 
-    # Traverse the first (defined as left) child: 
+    # Traverse the first (defined as left) child:
     # determine its entry/exit directions, recurse, and store its exit point.
     child_l = _get_child(node, first(order))
     child_l_entry, child_l_exit = _get_child_entry_exit(node.entry, node.exit, node._splitdim, first(order))
     last_exit = _traverse_kd(child_l, child_l_entry, child_l_exit, last_exits, acc)
-    if !isnothing(last_exit) 
+    if !isnothing(last_exit)
         push!(last_exits, last_exit)
     end
-    # Then traverse the second (defined as right) child: 
+    # Then traverse the second (defined as right) child:
     # infer its entry as opposite of first child's exit, recurse, and store its exit point.
     child_r = _get_child(node, last(order))
     child_r_entry, child_r_exit = (_opposite_dir(child_l_exit), node.exit)
     last_exit = _traverse_kd(child_r, child_r_entry, child_r_exit, last_exits, acc)
-    if !isnothing(last_exit) 
+    if !isnothing(last_exit)
         push!(last_exits, last_exit)
     end
 
@@ -280,7 +317,13 @@ end
 
 
 """
-    _step(entry::Symbol, exit::Symbol, _splitdim::Int, entry_pt::Tuple{Float64, Float64}, _splitval::Float64)
+    _step(
+    entry::Symbol,
+    exit::Symbol,
+    _splitdim::Int,
+    entry_pt::Tuple{Float64, Float64},
+    _splitval::Float64
+)
 
 Determine the traversal order of child nodes in a kd-tree based on entry and exit directions.
 
@@ -300,7 +343,13 @@ julia> _step(:L, :R, 1, (0.0, 0.5), 0.3)
 [:left, :right]
 ```
 """
-function _step(entry::Symbol, exit::Symbol, _splitdim::Int, entry_pt::Tuple{Float64, Float64}, _splitval::Float64)
+function _step(
+    entry::Symbol,
+    exit::Symbol,
+    _splitdim::Int,
+    entry_pt::Tuple{Float64,Float64},
+    _splitval::Float64
+)
     type = _order_type(entry, exit)
     align = _get_alignment(entry, _splitdim)
 
@@ -315,16 +364,16 @@ function _step(entry::Symbol, exit::Symbol, _splitdim::Int, entry_pt::Tuple{Floa
         else # :cis + :perpendicular
             if _splitdim == 1
                 return exit == :L ? [:right, :left] : [:left, :right]
-                
+
             else
                 return exit == :T ? [:bottom, :top] : [:top, :bottom]
             end
         end
     else  # :tran
         if align == :parallel
-            if _splitdim == 1 
+            if _splitdim == 1
                 return entry == :L ? [:left, :right] : [:right, :left]
-            else 
+            else
                 return entry == :T ? [:top, :bottom] : [:bottom, :top]
             end
         else # :tran + :perpendicular
@@ -364,7 +413,7 @@ function _get_child(node::KdNode, side::Symbol)
     elseif node._splitdim == 2
         return side == :bottom ? node.left : node.right
     else
-        error("Invalid _splitdim")
+        error("Invalid _splitdim : $(node._splitdim) (should be 1 or 2)")
     end
 end
 
@@ -393,13 +442,18 @@ julia> _get_child_entry_exit(:L, :R, 1, :left)
 (:L, :R)
 ```
 """
-function _get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, _splitdim::Int, side::Symbol)
+function _get_child_entry_exit(
+    parent_entry::Symbol,
+    parent_exit::Symbol,
+    _splitdim::Int,
+    side::Symbol
+)
     type = _order_type(parent_entry, parent_exit)
     align = _get_alignment(parent_entry, _splitdim)
 
     if type == :tran && align == :parallel
         return (parent_entry, parent_exit)
-    elseif  type == :tran && align == :perpendicular
+    elseif type == :tran && align == :perpendicular
         if _splitdim == 1
             if parent_entry == :T
                 if side == :left
@@ -428,7 +482,6 @@ function _get_child_entry_exit(parent_entry::Symbol, parent_exit::Symbol, _split
                     return (:R, :T)
                 end
             end
-
         end
     elseif type == :cis && align == :parallel
         if _splitdim == 1
@@ -517,11 +570,11 @@ julia> _order_type(:T, :R)
 """
 function _order_type(entry::Symbol, exit::Symbol)
     if (entry == :L && exit == :R) || (entry == :R && exit == :L) ||
-        (entry == :T && exit == :B) || (entry == :B && exit == :T)
-         return :tran
-     else
-         return :cis
-     end
+       (entry == :T && exit == :B) || (entry == :B && exit == :T)
+        return :tran
+    else
+        return :cis
+    end
 end
 
 
@@ -575,18 +628,9 @@ julia> _opposite_dir(:T)
 :B
 ```
 """
-function _opposite_dir(dir::Symbol)::Symbol
-    if dir == :T
-        return :B
-    elseif dir == :B
-        return :T
-    elseif dir == :L
-        return :R
-    elseif dir == :R
-        return :L
-    else
-        error("Unknown direction: $dir")
-    end
+function _opposite_dir(dir::Union{:T,:B,:L,:R})
+    const OPPOSITE_DIRECTIONS = Dict(:T => :B, :B => :T, :L => :R, :R => :L)
+    return OPPOSITE_DIRECTIONS[dir]
 end
 
 
@@ -621,9 +665,7 @@ function _get_partition(v::AbstractVector, k::Int)
     for i in 1:k
         start_idx = (i - 1) * chunk_size + 1
         end_idx = min(i * chunk_size, n)
-        for j in start_idx:end_idx
-            part[v[j]] = i
-        end
+        part[v[start_idx, end_idx]] .= i
     end
 
     return part

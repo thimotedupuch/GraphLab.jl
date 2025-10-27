@@ -25,29 +25,29 @@ julia> part_sfc(A, coords, 4, :morton)
 ```
 """
 function part_sfc(A::SparseMatrixCSC, coords::Matrix, k::Int=2, curve::Symbol=:gilbert)
-    N = size(coords, 1);
+    N = size(coords, 1)
 
     # 1. Coordinates normalization
-    coords_centered = coords .- minimum(coords, dims=1);
-    scale = maximum(coords_centered);
-    norm_coords = coords_centered ./ scale;
+    coords_centered = coords .- minimum(coords, dims=1)
+    scale = maximum(coords_centered)
+    norm_coords = coords_centered ./ scale
 
     # 2. Discretization into square grid
-    grid_size = ceil(Int, sqrt(N));
-    grid_coords = clamp.(floor.(Int, norm_coords .* (grid_size - 1)) .+ 1, 1, grid_size);
+    grid_size = ceil(Int, sqrt(N))
+    grid_coords = clamp.(floor.(Int, norm_coords .* (grid_size - 1)) .+ 1, 1, grid_size)
 
     # 3. Fill grid with nodes indices
-    grid = [Int[] for _ in 1:grid_size, _ in 1:grid_size];
+    grid = [Int[] for _ in 1:grid_size, _ in 1:grid_size]
     for node in 1:N
         x, y = grid_coords[node, :]
         push!(grid[x, y], node)
     end
 
     # 4. Traverse with space filling curve
-    order = _sfc_indices(curve, (grid_size, grid_size));
+    order = _sfc_indices(curve, (grid_size, grid_size))
 
     # Ordering sanity check
-    expected_count = grid_size*grid_size
+    expected_count = grid_size * grid_size
     @assert length(order) == expected_count "Missing or extra points in order"
     @assert length(unique(order)) == expected_count "Duplicate grid cells in order"
 
@@ -65,14 +65,8 @@ function part_sfc(A::SparseMatrixCSC, coords::Matrix, k::Int=2, curve::Symbol=:g
 end
 
 
-function _sfc_indices(curve::Symbol, grid_dims::Tuple{Int, Int}) 
-    if curve == :gilbert
-        return _gilbert_indices(grid_dims)
-    elseif curve == :morton 
-        return _morton_indices(grid_dims)
-    else
-        throw(ArgumentError("Unsupported SFC method: $curve. Use :gilbert or :morton."))
-    end
+function _sfc_indices(curve::Union{:gilbert,:morton}, grid_dims::Tuple{Int,Int})
+    curve == :gilbert ? _gilbert_indices(grid_dims) : _morton_indices(grid_dims)
 end
 
 # The following function was adapted from code by Simon Byrne's GilbertCurves.jl (https://github.com/CliMA/GilbertCurves.jl/)
@@ -101,8 +95,8 @@ julia> println(order)
 [CartesianIndex(1, 1), CartesianIndex(2, 1), CartesianIndex(2, 2), ...]
 ```
 """
-_gilbert_indices(grid_dims::Tuple{Int, Int}; maj_axis=grid_dims[1] ≥ grid_dims[2] ? 1 : 2) =
-_gilbert_order(CartesianIndices(grid_dims); maj_axis)
+_gilbert_indices(grid_dims::Tuple{Int,Int}; maj_axis=grid_dims[1] ≥ grid_dims[2] ? 1 : 2) =
+    _gilbert_order(CartesianIndices(grid_dims); maj_axis)
 
 
 """
@@ -111,13 +105,13 @@ _gilbert_order(CartesianIndices(grid_dims); maj_axis)
 Return a list of `CartesianIndex` values from a grid, traversed recursively using
 Gilbert curve logic. When `maj_axis == 2`, the grid is transposed to preserve logic.
 """
-function _gilbert_order(grid_indices::AbstractMatrix; maj_axis=size(grid_indices, 1) ≥ size(grid_indices, 2) ? 1 : 2)
+function _gilbert_order(
+    grid_indices::AbstractMatrix;
+    maj_axis=size(grid_indices, 1) ≥ size(grid_indices, 2) ? 1 : 2
+)
     traversal = CartesianIndex{2}[]
-    if maj_axis == 1
-        _append_gilbert!(traversal, grid_indices)
-    else
-        _append_gilbert!(traversal, permutedims(grid_indices, (2, 1)))
-    end
+    oriented_grid = maj_axis == 1 ? grid_indices : permutedims(grid_indices, (2, 1))
+    _append_gilbert!(traversal, oriented_grid)
     return traversal
 end
 
@@ -133,7 +127,7 @@ function _append_gilbert!(path::Vector{CartesianIndex{2}}, grid::AbstractMatrix)
 
     if nrows == 1 || ncols == 1
         append!(path, vec(grid))  # base case: single row or column
-    elseif 2*nrows > 3*ncols
+    elseif 2 * nrows > 3 * ncols
         mid = div(nrows, 2)
         if isodd(mid) && nrows > 2
             mid += 1
@@ -179,17 +173,12 @@ julia> println(order)
 [CartesianIndex(1, 1), CartesianIndex(1, 2), CartesianIndex(2, 1), CartesianIndex(2, 2), ...]
 ```
 """
-function _morton_indices(grid_dims::Tuple{Int, Int})
+function _morton_indices(grid_dims::Tuple{Int,Int})
     rows, cols = grid_dims
-    order = CartesianIndex{2}[]
-
-    for i in 1:rows, j in 1:cols
-        push!(order, CartesianIndex(i, j))
-    end
+    indices = [CartesianIndex(i, j) for i in 1:rows, j in 1:cols] |> vec
 
     # Sort by Morton index (bit interleaving of (i-1, j-1))
-    sort!(order, by = ij -> _morton_index(ij[1] - 1, ij[2] - 1))
-    return order
+    return sort(indices, by=ij -> _morton_index(ij[1] - 1, ij[2] - 1))
 end
 
 
@@ -210,9 +199,9 @@ Expand 16-bit integer `n` into 32 bits with zeros between the original bits.
 """
 function _part1by1(n::Int)
     n = n & 0x0000ffff
-    n = (n | (n << 8))  & 0x00FF00FF
-    n = (n | (n << 4))  & 0x0F0F0F0F
-    n = (n | (n << 2))  & 0x33333333
-    n = (n | (n << 1))  & 0x55555555
+    n = (n | (n << 8)) & 0x00FF00FF
+    n = (n | (n << 4)) & 0x0F0F0F0F
+    n = (n | (n << 2)) & 0x33333333
+    n = (n | (n << 1)) & 0x55555555
     return n
 end
